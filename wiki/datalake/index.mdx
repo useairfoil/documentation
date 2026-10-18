@@ -1,0 +1,62 @@
+---
+title: "What is a data lake?"
+titleShort: "Data lake"
+description: "A data lake is a central place to store large amounts of raw data, in its original format, at low cost."
+updatedAt: 2026-10-18 14:06
+---
+
+# What is a data lake?
+
+A data lake is a primary location where a company's data arrives and is stored, as it is. Everything lands here, like sales records, app logs, support tickets, documents, and images, without being touched first.
+
+You don't have to decide how to structure the data upfront. That happens later, when you query it. This is called *schema-on-read*.
+
+## Why it matters
+
+Many companies' data is scattered across multiple tools and platforms: payments in one place, customers in another, product usage elsewhere. Answering a simple question such as "which clients are most likely to cancel?" requires gathering information from each tool and piecing it together.
+
+A data lake resolves this by bringing everything into one place. It's useful because it:
+
+- **Costs little to store a lot.** Data lakes usually sit on cheap [object storage](/wiki/object-storage/index.mdx).
+- **Accepts all data.** That includes [structured](/wiki/structured-data/index.mdx), [semi-structured](/wiki/semi-structured-data/index.mdx), and [unstructured](/wiki/unstructured-data/index.mdx) data, side by side.
+- **Keeps your options open.** You don't need to predict questions you'll ask in the future.
+
+## How it works
+
+Imagine the difference between a big catch-all drawer and an orderly filing cabinet. A [data warehouse](/wiki/data-warehouse/index.mdx) is like an orderly filing cabinet: everything sorted and labeled before it goes in. A data lake lets you throw anything in and sort through it later, when you need something.
+
+In practice:
+
+1. Data arrives from your tools and applications.
+2. It's saved as files in object storage, in its original format.
+3. When someone runs a query, the tool reads those files and applies structure.
+
+However, without labels and organization, a data lake can turn into a *data swamp*, like a drawer so full you can't find anything. To prevent this, modern data lakes use a table format like [Apache Iceberg](/wiki/iceberg/index.mdx) and a [catalog](/wiki/catalog/index.mdx) to keep track of what's stored and where.
+
+| | Data lake | Data warehouse |
+| --- | --- | --- |
+| **Data types** | Any: structured, semi-structured, unstructured | Mostly structured tables |
+| **Structure** | Applied when data is read | Defined before data is loaded |
+| **Data state** | Raw, as it arrived | Cleaned and transformed |
+| **Best for** | Flexible analysis, AI, future questions | Fast, repeatable reporting |
+
+## Example
+
+An online pet-sitting business uses Stripe for payments, Salesforce for customer records, and Freshdesk for support. Each tool has its own data, in its own format.
+
+With a data lake, all three land in one place. The team can then ask a question no single tool could answer: *"Are the people who keep contacting support the same ones who leave?"*
+
+## Data lakes in Airfoil
+
+Airfoil builds your data lake for you. [Connectors](/wiki/connector/index.mdx) bring in data from the SaaS tools you already use, and an [API](/wiki/api/index.mdx) lets you send data from your own applications.
+
+Airfoil stores everything as Apache Iceberg tables on object storage, so your lake stays organized instead of becoming a swamp. It also removes duplicate records and keeps only the latest version of each one. Every table is labeled with context, so AI agents can query it and give grounded answers.
+
+{/* TODO: link to the Architecture product doc once it exists */}
+
+## Related terms
+
+- [Object storage](/wiki/object-storage/index.mdx): where a data lake's files live
+- [Apache Iceberg](/wiki/iceberg/index.mdx): the table format that keeps a data lake organized
+- [Catalog](/wiki/catalog/index.mdx): the index that tracks every table in the lake
+- [Structured data](/wiki/structured-data/index.mdx): the kind of data most people picture as rows and columns
