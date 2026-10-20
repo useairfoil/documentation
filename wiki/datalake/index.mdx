@@ -1,15 +1,15 @@
 ---
 title: "What is a data lake?"
 titleShort: "Data lake"
-description: "A data lake is a central place to store large amounts of raw data, in its original format, at low cost."
-updatedAt: 2026-10-18 14:06
+description: "A data lake is a central place to store large amounts of data, from raw files to organized tables, at low cost."
+updatedAt: 2026-10-20 15:08
 ---
 
 # What is a data lake?
 
-A data lake is a primary location where a company's data arrives and is stored, as it is. Everything lands here, like sales records, app logs, support tickets, documents, and images, without being touched first.
+A data lake is a central place where a company's data is stored. Everything can land here, like sales records, app logs, support tickets, documents, and images, without needing to be cleaned up first.
 
-You don't have to decide how to structure the data upfront. That happens later, when you query it. This is called *schema-on-read*.
+In a traditional data lake, you decide how to structure data later, when you query it. This is called *schema-on-read*. Modern data lakes often go a step further and organize data into tables as it arrives. This approach is called a *data lakehouse*.
 
 ## Why it matters
 
@@ -31,14 +31,14 @@ In practice:
 2. It's saved as files in object storage, in its original format.
 3. When someone runs a query, the tool reads those files and applies structure.
 
-However, without labels and organization, a data lake can turn into a *data swamp*, like a drawer so full you can't find anything. To prevent this, modern data lakes use a table format like [Apache Iceberg](/wiki/iceberg/index.mdx) and a [catalog](/wiki/catalog/index.mdx) to keep track of what's stored and where.
+However, without labels and organization, a data lake can turn into a *data swamp*, like a drawer so full you can't find anything. To prevent this, many teams now build a data lakehouse. It combines the best of both: the cheap storage and open file formats of a data lake, with the table structure of a data warehouse. A table format like [Apache Iceberg](/wiki/iceberg/index.mdx) and a [catalog](/wiki/catalog/index.mdx) keep track of every table and what's in it.
 
-| | Data lake | Data warehouse |
-| --- | --- | --- |
-| **Data types** | Any: structured, semi-structured, unstructured | Mostly structured tables |
-| **Structure** | Applied when data is read | Defined before data is loaded |
-| **Data state** | Raw, as it arrived | Cleaned and transformed |
-| **Best for** | Flexible analysis, AI, future questions | Fast, repeatable reporting |
+| | Data lake | Data lakehouse | Data warehouse |
+| --- | --- | --- | --- |
+| **Data types** | Any: structured, semi-structured, unstructured | Any, organized into tables | Mostly structured tables |
+| **Structure** | Applied when data is read | Tables with a defined schema that can change over time | Defined before data is loaded |
+| **Storage** | Low-cost object storage, open file formats | Low-cost object storage, open table formats (e.g., Iceberg) | Built into the warehouse |
+| **Best for** | Storing raw data cheaply | Flexible analysis and reliable reporting, including AI | Fast, repeatable reporting |
 
 ## Example
 
@@ -48,9 +48,9 @@ With a data lake, all three land in one place. The team can then ask a question 
 
 ## Data lakes in Airfoil
 
-Airfoil builds your data lake for you. [Connectors](/wiki/connector/index.mdx) bring in data from the SaaS tools you already use, and an [API](/wiki/api/index.mdx) lets you send data from your own applications.
+Airfoil builds a data lakehouse for you. [Connectors](/wiki/connector/index.mdx) bring in data from the SaaS tools you already use, and an [API](/wiki/api/index.mdx) lets you send data from your own applications.
 
-Airfoil stores everything as Apache Iceberg tables on object storage, so your lake stays organized instead of becoming a swamp. It also removes duplicate records and keeps only the latest version of each one. Every table is labeled with context, so AI agents can query it and give grounded answers.
+Everything is stored as Apache Iceberg tables on object storage, so your data is organized into tables from the moment it arrives. Airfoil also [removes duplicate records](/wiki/deduplication/index.mdx) and keeps only the latest version of each one, so you don't have to build your own pipeline to clean up your data. Every table is labeled with context, so AI agents can query it and give grounded answers.
 
 {/* TODO: link to the Architecture product doc once it exists */}
 
