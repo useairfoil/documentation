@@ -27,7 +27,7 @@ Think of it like parcel tracking. You post a parcel and get a tracking number to
 
 1. Objects are stored in containers called **buckets**.
 2. Inside a bucket, there are no real folders. Every object sits side by side in one flat space, which is what lets object storage grow so large.
-3. Applications save and fetch objects over the internet, using the object's ID (often called its *key*).
+3. Applications save and fetch objects over the internet, using the object's path (often called its *key*).
 
 Object storage is great for storing large amounts of data, but it doesn't understand what's inside the files. That's why data lakes add a table format like [Apache Iceberg](/wiki/iceberg/index.mdx) on top, so groups of files can be treated as organized tables.
 
