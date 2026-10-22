@@ -1,15 +1,15 @@
 ---
 title: "What is object storage?"
 titleShort: "Object storage"
-description: "Object storage is a low-cost way to store huge amounts of data as individual files, each with a unique ID and descriptive labels."
-updatedAt: 2026-10-18 15:12
+description: "Object storage is a low-cost way to store huge amounts of data as individual files, each with its own path and descriptive labels."
+updatedAt: 2026-10-22 17:40
 ---
 
 # What is object storage?
 
 Object storage is a way of saving data, usually in the cloud, as individual items called objects. An object can be anything: a spreadsheet export, a log file, a photo, or a chunk of a database table.
 
-Each object is stored together with two extra things: a **unique ID** so it can be found again, and **metadata**, which are labels that describe what's inside. Popular object storage services include Amazon S3, Google Cloud Storage, and Azure Blob Storage.
+Each object is stored with its **path**, a name like `bookings/2026/10/01.csv` that tells you where to find it, and **metadata**, labels that describe what's inside. No two objects can share the same path, so each path points to exactly one object.
 
 ## Why it matters
 
@@ -17,16 +17,18 @@ Companies today produce much more data than a single server can hold. Object sto
 
 - **It scales effortlessly.** You can keep adding data, from a few files to billions, without planning for disk space.
 - **It's low-cost.** Storing data this way is much cheaper than keeping it in a traditional database.
-- **It keeps data safe.** Providers copy each object across multiple machines and locations, so losing data is extremely unlikely.
+- **It keeps data safe.** Providers copy each object across multiple machines and locations, so losing data is extremely unlikely. This is called [durability](/wiki/durability/index.mdx).
 
 This is why object storage is the foundation of most modern [data lakes](/wiki/datalake/index.mdx).
 
 ## How it works
 
-Think of it like parcel tracking. You post a parcel and get a tracking number to check on it. Object storage works the same way: you save an object, and its unique ID is your tracking number. You don't need to know where it's physically stored; you just use the ID to get it back.
+Think of the files on your computer, but on a drive that never runs out of space. Each file has a path, like `photos/2026/beach.jpg`, and you use that path to open it. Object storage works the same way, except it can hold billions of files.
+
+In practice:
 
 1. Objects are stored in containers called **buckets**.
-2. Inside a bucket, there are no real folders. Every object sits side by side in one flat space, which is what lets object storage grow so large.
+2. Inside a bucket, there are no real folders. A path like `bookings/2026/10/01.csv` looks like folders, but it's really just the object's name. Every object sits side by side in one flat space, which is what lets object storage grow so large.
 3. Applications save and fetch objects over the internet, using the object's path (often called its *key*).
 
 Object storage is great for storing large amounts of data, but it doesn't understand what's inside the files. That's why data lakes add a table format like [Apache Iceberg](/wiki/iceberg/index.mdx) on top, so groups of files can be treated as organized tables.
@@ -46,13 +48,14 @@ Instead of buying more servers, the business saves everything to an S3 bucket. S
 
 ## Object storage in Airfoil
 
-Airfoil stores all your data on object storage, as [Apache Iceberg](/wiki/iceberg/index.mdx) tables. Object storage is where your data actually lives. The rest of Airfoil brings data in, organizes it, and keeps track of it.
+Airfoil stores all your data on object storage, as [Apache Iceberg](/wiki/iceberg/index.mdx) tables. You can choose how that storage is set up:
 
-{/* TODO: confirm with Francesco whether customers bring their own bucket (e.g., S3) or Airfoil hosts storage, and which providers are supported. Link to the relevant product doc. */}
+- **Airfoil-managed:** Airfoil creates and manages the bucket and the Iceberg [catalog](/wiki/catalog/index.mdx) for you. This is the most convenient option.
+- **Bring your own:** connect your own bucket and Iceberg catalog, so your data stays in your own cloud account and under your control.
 
 ## Related terms
 
-- [Data lake](/wiki/datalake/index.mdx): a central store of raw data, usually built on object storage
+- [Data lake](/wiki/datalake/index.mdx): a central store for all of a company's data
 - [Apache Iceberg](/wiki/iceberg/index.mdx): the table format that organizes files in object storage into tables
 - [Unstructured data](/wiki/unstructured-data/index.mdx): data like images and documents, often kept in object storage
 - [Durability](/wiki/durability/index.mdx): how well stored data survives failures
