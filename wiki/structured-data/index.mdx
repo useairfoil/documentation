@@ -2,7 +2,7 @@
 title: "What is structured data?"
 titleShort: "Structured data"
 description: "Structured data is data organized into a fixed format of rows and columns, like a spreadsheet or database table."
-updatedAt: 2026-10-20 16:12
+updatedAt: 2026-10-23 14:30
 ---
 
 # What is structured data?
@@ -49,7 +49,7 @@ A pet-sitting business uses Stripe for payments. Every payment arrives with the 
 
 Airfoil stores data as [Apache Iceberg](/wiki/iceberg/index.mdx) tables, so data from your tools ends up structured: rows and columns with a defined schema. Data from SaaS tools like Stripe or Salesforce is usually structured already, and Airfoil keeps it that way, ready to query.
 
-{/* TODO: confirm how Airfoil handles semi-structured fields from connectors (e.g., nested JSON) and link to the relevant product doc. */}
+Not everything fits neatly into columns. Recent versions of Iceberg can store JSON-like data in a single flexible column, so Airfoil also supports [semi-structured data](/wiki/semi-structured-data/index.mdx) out of the box.
 
 ## Related terms
 
