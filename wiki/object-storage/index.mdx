@@ -1,0 +1,61 @@
+---
+title: "What is object storage?"
+titleShort: "Object storage"
+description: "Object storage is a low-cost way to store huge amounts of data as individual files, each with its own path and descriptive labels."
+updatedAt: 2026-10-22 17:40
+---
+
+# What is object storage?
+
+Object storage is a way of saving data, usually in the cloud, as individual items called objects. An object can be anything: a spreadsheet export, a log file, a photo, or a chunk of a database table.
+
+Each object is stored with its **path**, a name like `bookings/2026/10/01.csv` that tells you where to find it, and **metadata**, labels that describe what's inside. No two objects can share the same path, so each path points to exactly one object.
+
+## Why it matters
+
+Companies today produce much more data than a single server can hold. Object storage solves this by making storage almost limitless and cheap:
+
+- **It scales effortlessly.** You can keep adding data, from a few files to billions, without planning for disk space.
+- **It's low-cost.** Storing data this way is much cheaper than keeping it in a traditional database.
+- **It keeps data safe.** Providers copy each object across multiple machines and locations, so losing data is extremely unlikely. This is called [durability](/wiki/durability/index.mdx).
+
+This is why object storage is the foundation of most modern [data lakes](/wiki/datalake/index.mdx).
+
+## How it works
+
+Think of the files on your computer, but on a drive that never runs out of space. Each file has a path, like `photos/2026/beach.jpg`, and you use that path to open it. Object storage works the same way, except it can hold billions of files.
+
+In practice:
+
+1. Objects are stored in containers called **buckets**.
+2. Inside a bucket, there are no real folders. A path like `bookings/2026/10/01.csv` looks like folders, but it's really just the object's name. Every object sits side by side in one flat space, which is what lets object storage grow so large.
+3. Applications save and fetch objects over the internet, using the object's path (often called its *key*).
+
+Object storage is great for storing large amounts of data, but it doesn't understand what's inside the files. That's why data lakes add a table format like [Apache Iceberg](/wiki/iceberg/index.mdx) on top, so groups of files can be treated as organized tables.
+
+| | Object storage | File storage | Block storage |
+| --- | --- | --- | --- |
+| **Organized as** | Objects in a flat bucket | Files in folders | Fixed-size blocks |
+| **Scales to** | Billions of objects | Limited by the folder structure | Limited by the disk |
+| **Best for** | Data lakes, backups, media, analytics | Shared drives and documents | Databases and virtual machines |
+| **Cost** | Low | Medium | Higher |
+
+## Example
+
+A pet-sitting business exports its bookings every night as a file. After a year's business, that's 365 files, plus customer photos, support emails, and app logs.
+
+Instead of buying more servers, the business saves everything to an S3 bucket. Storage grows automatically, costs stay low, and any analytics tool can read the files when needed.
+
+## Object storage in Airfoil
+
+Airfoil stores all your data on object storage, as [Apache Iceberg](/wiki/iceberg/index.mdx) tables. You can choose how that storage is set up:
+
+- **Airfoil-managed:** Airfoil creates and manages the bucket and the Iceberg [catalog](/wiki/catalog/index.mdx) for you. This is the most convenient option.
+- **Bring your own:** connect your own bucket and Iceberg catalog, so your data stays in your own cloud account and under your control.
+
+## Related terms
+
+- [Data lake](/wiki/datalake/index.mdx): a central store for all of a company's data
+- [Apache Iceberg](/wiki/iceberg/index.mdx): the table format that organizes files in object storage into tables
+- [Unstructured data](/wiki/unstructured-data/index.mdx): data like images and documents, often kept in object storage
+- [Durability](/wiki/durability/index.mdx): how well stored data survives failures
