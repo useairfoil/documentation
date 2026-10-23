@@ -1,0 +1,59 @@
+---
+title: "What is structured data?"
+titleShort: "Structured data"
+description: "Structured data is data organized into a fixed format of rows and columns, like a spreadsheet or database table."
+updatedAt: 2026-10-23 14:30
+---
+
+# What is structured data?
+
+Structured data is information organized into a fixed, predictable format: rows and columns, like a spreadsheet. Every row is one record, such as a customer or a payment, and every column holds one type of detail, such as a name, a date, or an amount.
+
+The rules for what each column contains are set in advance. This set of rules is called a [table schema](/wiki/table-schema/index.mdx).
+
+## Why it matters
+
+Structured data always follows the same format, so it's the easiest kind of data to search, sort, and analyze:
+
+- **It's easy to query.** You can ask precise questions, like "total revenue in March", and get exact answers.
+- **It's reliable.** Every record has the same fields, so nothing is missing or in the wrong place.
+- **Most business tools produce it.** Payments, orders, subscriptions, and customer records usually come out of your tools already structured.
+
+## How it works
+
+Think of a paper form with labeled boxes: name, date, amount. Everyone fills in the same boxes, so every form can be filed and compared in the same way. Structured data works like a stack of those forms, turned into a table.
+
+Here's what a small table of structured data looks like:
+
+| booking_id | customer | service | date | price_usd |
+| --- | --- | --- | --- | --- |
+| 1042 | Alex Kim | Dog walking | 2026-10-01 | 25.00 |
+| 1043 | Sam Jones | Cat sitting | 2026-10-02 | 40.00 |
+| 1044 | Alex Kim | Dog walking | 2026-10-03 | 25.00 |
+
+Each column has a name and a type: `date` always holds a date, and `price_usd` always holds a number. That consistency is what lets tools add up prices or filter by date instantly, often using a query language called SQL.
+
+The trade-off is flexibility. Structured data only fits information that can be described in advance. Things like emails, photos, or free-form logs don't fit neatly into columns, which is where [semi-structured](/wiki/semi-structured-data/index.mdx) and [unstructured](/wiki/unstructured-data/index.mdx) data come in.
+
+| | Structured | Semi-structured | Unstructured |
+| --- | --- | --- | --- |
+| **Format** | Fixed rows and columns | Labeled but flexible (e.g., JSON) | No set format |
+| **Examples** | Payments, orders, customer records | API responses, app events, logs | Emails, documents, images |
+| **Easy to query?** | Yes | Partly | Not without extra processing |
+
+## Example
+
+A pet-sitting business uses Stripe for payments. Every payment arrives with the same fields: amount, currency, customer, and date. Stored as a table, the team can instantly answer questions like *"How much did we earn from dog walking last month?"*
+
+## Structured data in Airfoil
+
+Airfoil stores data as [Apache Iceberg](/wiki/iceberg/index.mdx) tables, so data from your tools ends up structured: rows and columns with a defined schema. Data from SaaS tools like Stripe or Salesforce is usually structured already, and Airfoil keeps it that way, ready to query.
+
+Not everything fits neatly into columns. Recent versions of Iceberg can store JSON-like data in a single flexible column, so Airfoil also supports [semi-structured data](/wiki/semi-structured-data/index.mdx) out of the box.
+
+## Related terms
+
+- [Table schema](/wiki/table-schema/index.mdx): the rules that define a table's columns and their types
+- [Semi-structured data](/wiki/semi-structured-data/index.mdx): data with labels but a flexible shape, like JSON
+- [Unstructured data](/wiki/unstructured-data/index.mdx): data with no set format, like images and documents
+- [Data lake](/wiki/datalake/index.mdx): where structured, semi-structured, and unstructured data are stored side by side
