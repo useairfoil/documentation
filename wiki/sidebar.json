@@ -1,0 +1,13 @@
+{
+  "sections": [
+    {
+      "name": "Data basics",
+      "path": "/",
+      "items": [
+        { "name": "Data lake", "type": "page", "path": "/datalake" },
+        { "name": "Object storage", "type": "page", "path": "/object-storage" },
+        { "name": "Structured data", "type": "page", "path": "/structured-data" }
+      ]
+    }
+  ]
+}
