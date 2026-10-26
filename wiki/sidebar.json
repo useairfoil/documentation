@@ -8,6 +8,13 @@
         { "name": "Object storage", "type": "page", "path": "/object-storage" },
         { "name": "Structured data", "type": "page", "path": "/structured-data" }
       ]
+    },
+    {
+      "name": "Apache Iceberg",
+      "path": "/",
+      "items": [
+        { "name": "Apache Iceberg", "type": "page", "path": "/iceberg" }
+      ]
     }
   ]
 }
