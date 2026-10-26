@@ -2,7 +2,7 @@
 title: "What is Apache Iceberg?"
 titleShort: "Apache Iceberg"
 description: "Apache Iceberg is an open table format that turns files in a data lake into reliable tables you can query, update, and roll back."
-updatedAt: 2026-10-26 12:
+updatedAt: 2026-10-26 16:29
 ---
 
 # What is Apache Iceberg?
@@ -44,9 +44,13 @@ Instead of trying to find and delete them by hand, the team rolls the table back
 
 Iceberg is at the core of Airfoil. The Airfoil storage engine writes all your data directly into Iceberg tables on object storage, and it works with the major Iceberg catalogs and analytics engines.
 
-Because the tables use an open format, you're never locked in: you can query your Airfoil data with any Iceberg-compatible tool, or connect your own Iceberg catalog.
+Because the tables use an open format, you're never locked in. You can query your Airfoil data with any Iceberg-compatible engine, or connect your own Iceberg catalog.
 
-{/* TODO: link to the Architecture product doc once it exists. Optionally confirm with Francesco which catalogs and engines to name. */}
+To learn how to connect a specific engine to Airfoil, see its guide:
+
+{/* TODO: confirm supported engines and page paths with Francesco */}
+- [Apache Spark](/docs/engines/spark/index.mdx)
+- [Trino](/docs/engines/trino/index.mdx)
 
 ## Related terms
 
