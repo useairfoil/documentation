@@ -6,7 +6,8 @@
       "items": [
         { "name": "Data lake", "type": "page", "path": "/datalake" },
         { "name": "Object storage", "type": "page", "path": "/object-storage" },
-        { "name": "Structured data", "type": "page", "path": "/structured-data" }
+        { "name": "Structured data", "type": "page", "path": "/structured-data" },
+        { "name": "Semi-structured data", "type": "page", "path": "/semi-structured-data" }
       ]
     }
   ]
