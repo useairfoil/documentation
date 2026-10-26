@@ -1,0 +1,62 @@
+---
+title: "What is semi-structured data?"
+titleShort: "Semi-structured data"
+description: "Semi-structured data is data with labels that describe each value, but no fixed set of columns, like JSON."
+updatedAt: 2026-10-26 10:50
+---
+
+# What is semi-structured data?
+
+Semi-structured data is information that's organized with labels, but doesn't follow a fixed table layout. Each value comes with a name that says what it is, such as `"email": "alex@example.com"`, but different records can have different fields.
+
+The most common format is JSON, which is what most apps and APIs use to send data to each other.
+
+## Why it matters
+
+A lot of modern data doesn't fit neatly into rows and columns. App events, API responses, and logs change shape all the time, as products add new features and fields:
+
+- **It's flexible.** New fields can appear without anyone redesigning a table first.
+- **It describes itself.** Every value carries its own label, so the data still makes sense on its own.
+- **It's everywhere.** Most SaaS tools and APIs send data as JSON, so you'll meet it as soon as you connect them.
+
+The catch is that it's harder to query than [structured data](/wiki/structured-data/index.mdx). Tools have to read each record to find the fields they need.
+
+## How it works
+
+If you've ever scrolled through the contacts on your phone, you already know how semi-structured data works. Every contact has a name, but some also have a phone number, some an email address, and some a birthday. Each detail is labeled, so you always know what you're looking at, even though no two contacts look exactly alike.
+
+Here’s the same idea in JSON, using two events from a pet-sitting app:
+
+```json
+{ "event": "booking_created", "customer": "Alex Kim", "service": "Dog walking", "price_usd": 25 }
+{ "event": "review_left", "customer": "Sam Jones", "rating": 5, "comment": "Great with my cat!" }
+```
+
+Both events share some fields (`event` and `customer`), but each also has fields the other doesn't. In a regular table, you'd need a column for every possible field, and most of them would be empty. Semi-structured data only includes the fields each record actually has.
+
+Values can also be *nested*, meaning one field contains a whole group of other fields, such as an `address` field that holds a street, city, and zip code.
+
+| | Structured | Semi-structured | Unstructured |
+| --- | --- | --- | --- |
+| **Format** | Fixed rows and columns | Labeled but flexible (e.g., JSON) | No set format |
+| **Examples** | Payments, orders, customer records | API responses, app events, logs | Emails, documents, images |
+| **Easy to query?** | Yes | Partly | Not without extra processing |
+
+## Example
+
+A pet-sitting business tracks what customers do in its app: bookings, cancellations, reviews, and messages. Each type of event has different details, and new ones are added whenever the app gets a new feature.
+
+Storing these events as JSON means the team doesn't have to redesign a table every time. They can still ask questions like *"How many customers left a review after their first booking?"*
+
+## Semi-structured data in Airfoil
+
+Airfoil stores data as [Apache Iceberg](/wiki/iceberg/index.mdx) tables, and recent versions of Iceberg include a column type called *Variant*, built for JSON-like data. A Variant column can hold records with different fields, and new fields can appear without changing the [table schema](/wiki/table-schema/index.mdx).
+
+This means Airfoil supports semi-structured data out of the box: you can keep JSON from your apps and APIs as it is, in the same tables as your structured data, and still query it.
+
+## Related terms
+
+- [Structured data](/wiki/structured-data/index.mdx): data organized into fixed rows and columns
+- [Unstructured data](/wiki/unstructured-data/index.mdx): data with no set format, like images and documents
+- [Table schema](/wiki/table-schema/index.mdx): the rules that define a table's columns and their types
+- [Schema evolution strategies](/wiki/schema-evolution/index.mdx): ways to handle tables whose structure changes over time
