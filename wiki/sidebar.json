@@ -10,6 +10,13 @@
         { "name": "Semi-structured data", "type": "page", "path": "/semi-structured-data" },
         { "name": "Unstructured data", "type": "page", "path": "/unstructured-data" }
       ]
+    },
+    {
+      "name": "Apache Iceberg",
+      "path": "/",
+      "items": [
+        { "name": "Apache Iceberg", "type": "page", "path": "/iceberg" }
+      ]
     }
   ]
 }

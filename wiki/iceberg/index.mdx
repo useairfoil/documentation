@@ -1,0 +1,61 @@
+---
+title: "What is Apache Iceberg?"
+titleShort: "Apache Iceberg"
+description: "Apache Iceberg is an open table format that turns files in a data lake into reliable tables you can query, update, and roll back."
+updatedAt: 2026-10-26 16:29
+---
+
+# What is Apache Iceberg?
+
+Apache Iceberg is an open-source *table format*: a set of rules for organizing data files in a [data lake](/wiki/datalake/index.mdx) so they behave like proper database tables. It keeps track of which files belong to each table, what columns the table has, and how the table has changed over time.
+
+Iceberg was created at Netflix to handle huge amounts of data, and it's now an Apache project used by companies of all sizes.
+
+## Why it matters
+
+On its own, a data lake is just a pile of files in [object storage](/wiki/object-storage/index.mdx). Without something keeping track of them, it's hard to know which files make up a table, and two people changing the same data at once can break it. Iceberg fixes this:
+
+- **Reliable changes.** Updates either fully succeed or don't happen at all, so readers never see half-written data.
+- **Flexible structure.** You can add, rename, or remove columns without rewriting the whole table. See [schema evolution strategies](/wiki/schema-evolution/index.mdx).
+- **History built in.** Every change creates a new [snapshot](/wiki/snapshot/index.mdx), so you can look at the table as it was last week, or roll back a mistake.
+- **No lock-in.** Iceberg is an open standard, so many different tools can read and write the same tables.
+
+## How it works
+
+Picture a shared document with version history, like a Google Doc. You can see the latest version, but you can also open any earlier version and see exactly what changed. Iceberg gives your tables the same kind of history, on top of ordinary files.
+
+In practice, an Iceberg table has three layers:
+
+1. **Data files.** The actual rows, stored as files (usually Parquet) in object storage.
+2. **Metadata files.** A record of which data files belong to the table, the table's columns ([schema](/wiki/table-schema/index.mdx)), and its list of snapshots.
+3. **A [catalog](/wiki/catalog/index.mdx).** A directory that points to the latest metadata file for each table, so every tool knows where to start.
+
+When data changes, Iceberg writes new files and a new metadata file, then updates the catalog's pointer in one step. This step is called a [commit](/wiki/commit/index.mdx). Until it happens, everyone keeps seeing the previous version.
+
+Because Iceberg is an open format, many query engines can work with the same tables, including Apache Spark, Trino, and Apache Flink.
+
+## Example
+
+A pet-sitting business stores its bookings as an Iceberg table. One evening, a faulty import adds thousands of duplicate bookings.
+
+Instead of trying to find and delete them by hand, the team rolls the table back to the snapshot from that morning. The bad data disappears, and their reports are accurate again within minutes.
+
+## Apache Iceberg in Airfoil
+
+Iceberg is at the core of Airfoil. The Airfoil storage engine writes all your data directly into Iceberg tables on object storage, and it works with the major Iceberg catalogs and analytics engines.
+
+Because the tables use an open format, you're never locked in. You can query your Airfoil data with any Iceberg-compatible engine, or connect your own Iceberg catalog.
+
+To learn how to connect a specific engine to Airfoil, see its guide:
+
+{/* TODO: confirm supported engines and page paths with Francesco */}
+- [Apache Spark](/docs/engines/spark/index.mdx)
+- [Trino](/docs/engines/trino/index.mdx)
+
+## Related terms
+
+- [Catalog](/wiki/catalog/index.mdx): the directory that points to every Iceberg table
+- [Snapshot](/wiki/snapshot/index.mdx): a saved version of a table at a point in time
+- [Table schema](/wiki/table-schema/index.mdx): the columns a table has and their types
+- [Partitioning](/wiki/partitioning/index.mdx): how Iceberg groups data so queries can skip files they don't need
+- [Data lake](/wiki/datalake/index.mdx): the low-cost storage that Iceberg tables live in
