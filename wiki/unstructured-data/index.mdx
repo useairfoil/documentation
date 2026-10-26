@@ -1,0 +1,57 @@
+---
+title: "What is unstructured data?"
+titleShort: "Unstructured data"
+description: "Unstructured data is information with no set format, like emails, documents, images, and audio."
+updatedAt: 2026-10-26 11:44
+---
+
+# What is unstructured data?
+
+Unstructured data is information that doesn't follow any set format. There are no rows, columns, or labels telling you what each part means. Emails, PDFs, chat messages, photos, audio recordings, and videos are all unstructured data.
+
+It's often the richest information a company has, because it captures what people actually say and do, in their own words.
+
+## Why it matters
+
+Much of what a business knows lives in unstructured data: customer emails, support conversations, contracts, call recordings, and reviews. Ignoring it means missing a big part of the picture.
+
+- **It holds context.** Numbers tell you *what* happened. A support conversation or review often tells you *why*.
+- **It keeps growing.** Every email, message, and file adds to it.
+- **AI makes it usable.** Modern AI models can read text and images and pull out useful details, which used to take hours of manual work.
+
+The challenge is that computers can't query it directly. You can't add up a column in a photo or filter a PDF by date without first extracting the details you need.
+
+## How it works
+
+Unstructured data is a lot like a shoebox full of old letters, photos, and receipts. Everything you need might be in there, but to find every receipt from last year, someone has to go through the box and sort it first.
+
+In practice:
+
+1. Unstructured files are usually kept as they are, often in [object storage](/wiki/object-storage/index.mdx) as part of a [data lake](/wiki/datalake/index.mdx).
+2. To analyze them, a tool or AI model reads each file and extracts the details that matter, such as a customer name, a topic, or the overall sentiment.
+3. Those extracted details are saved as [structured](/wiki/structured-data/index.mdx) or [semi-structured](/wiki/semi-structured-data/index.mdx) data, which can then be queried like any other table.
+
+| | Structured | Semi-structured | Unstructured |
+| --- | --- | --- | --- |
+| **Format** | Fixed rows and columns | Labeled but flexible (e.g., JSON) | No set format |
+| **Examples** | Payments, orders, customer records | API responses, app events, logs | Emails, documents, images |
+| **Easy to query?** | Yes | Partly | Not without extra processing |
+
+## Example
+
+A pet-sitting business collects hundreds of written reviews and support emails every month, plus photos customers send of their pets.
+
+None of this fits into a table on its own. But by using AI to read each review and tag it with a topic and a sentiment, the team can turn it into data they can analyze, and ask *"Which service gets the most complaints, and why?"*
+
+## Unstructured data in Airfoil
+
+{/* TODO: confirm with Francesco how Airfoil handles unstructured data. For example: does it store free text (like support ticket bodies or review comments) as text columns? Does it handle files such as PDFs or images? Link to the relevant product doc. */}
+
+[How Airfoil handles unstructured data.]
+
+## Related terms
+
+- [Structured data](/wiki/structured-data/index.mdx): data organized into fixed rows and columns
+- [Semi-structured data](/wiki/semi-structured-data/index.mdx): data with labels but a flexible shape, like JSON
+- [Object storage](/wiki/object-storage/index.mdx): where unstructured files are usually kept
+- [Data lake](/wiki/datalake/index.mdx): a central store for all of a company's data
