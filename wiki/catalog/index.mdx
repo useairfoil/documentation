@@ -1,0 +1,58 @@
+---
+title: "What is a catalog?"
+titleShort: "Catalog"
+description: "A catalog is the directory that keeps track of every table in a data lake and points to its latest version."
+updatedAt: 2026-10-27 16:52
+---
+
+# What is a catalog?
+
+A catalog is a directory of all the tables in a [data lake](/wiki/datalake/index.mdx). For each table, it records the table's name and where to find its latest version.
+
+When a tool wants to read or change a table, it asks the catalog first. In an [Apache Iceberg](/wiki/iceberg/index.mdx) setup, the catalog is the single source of truth for which version of each table is current.
+
+## Why it matters
+
+A data lake can hold thousands of tables, each made up of many files in [object storage](/wiki/object-storage/index.mdx). Without a catalog, every tool would have to search through those files and guess which ones are current.
+
+- **One place to find everything.** Tools look up a table by name instead of hunting for files.
+- **Everyone sees the same version.** Because the catalog points to a single current version, every tool reads consistent data.
+- **Safe changes.** The catalog only switches to a new version once a change is complete, so readers never see half-finished updates.
+- **Organized tables.** Tables are grouped into *namespaces*, much like folders, such as `sales.orders` or `support.tickets`.
+
+## How it works
+
+How does a library with millions of books find the right one in seconds? It uses a catalog. Each entry lists a book's title and exactly which shelf it's on. When a new edition arrives, the librarian updates the entry, and everyone who looks it up goes straight to the new copy.
+
+An Iceberg catalog works the same way:
+
+1. Each table has an entry in the catalog, such as `sales.orders`.
+2. That entry points to the table's latest metadata file, which lists the table's columns, [snapshots](/wiki/snapshot/index.mdx), and data files.
+3. When data changes, a new metadata file is written, and the catalog updates its pointer in a single step. This is called a [commit](/wiki/commit/index.mdx).
+4. From that moment, every tool that asks the catalog gets the new version.
+
+There are several types of Iceberg catalog, such as REST catalogs, AWS Glue, and Hive Metastore. They all do the same core job: keeping track of where each table's current version lives.
+
+## Example
+
+A pet-sitting business has tables for bookings, customers, and reviews, all stored in an Iceberg data lake.
+
+When the analytics team opens their dashboard tool and asks for `bookings`, the tool checks the catalog, finds the latest version of the table, and reads exactly the right files. The team never needs to know where those files actually sit.
+
+## Catalogs in Airfoil
+
+Airfoil works with Iceberg catalogs, and you can choose how yours is set up:
+
+- **Airfoil-managed:** Airfoil creates and manages the catalog for you, alongside your storage.
+- **Bring your own:** connect your own Iceberg catalog, so your tables are registered in a catalog you already use.
+
+Either way, the catalog follows the open Iceberg standard, so any Iceberg-compatible tool can find and query your Airfoil tables.
+
+{/* TODO: confirm with Francesco which catalog types are supported for "bring your own" (e.g., REST, AWS Glue), and link to the Iceberg Catalog product doc once it exists. */}
+
+## Related terms
+
+- [Apache Iceberg](/wiki/iceberg/index.mdx): the table format that catalogs keep track of
+- [Snapshot](/wiki/snapshot/index.mdx): a saved version of a table that the catalog can point to
+- [Commit](/wiki/commit/index.mdx): the step where the catalog switches to a table's new version
+- [Object storage](/wiki/object-storage/index.mdx): where the table files the catalog points to are stored
