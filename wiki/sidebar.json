@@ -15,7 +15,9 @@
       "name": "Apache Iceberg",
       "path": "/",
       "items": [
-        { "name": "Apache Iceberg", "type": "page", "path": "/iceberg" }
+        { "name": "Apache Iceberg", "type": "page", "path": "/iceberg" },
+        { "name": "Catalog", "type": "page", "path": "/catalog" },
+        { "name": "Snapshot", "type": "page", "path": "/snapshot" }
       ]
     }
   ]
