@@ -1,0 +1,62 @@
+---
+title: "What is a snapshot?"
+titleShort: "Snapshot"
+description: "A snapshot is a saved version of a table at a specific point in time, created every time the table changes."
+updatedAt: 2026-10-26 17:21
+---
+
+# What is a snapshot?
+
+A snapshot is a saved version of a table at a specific point in time. In [Apache Iceberg](/wiki/iceberg/index.mdx), every change to a table, such as adding, updating, or deleting rows, creates a new snapshot.
+
+The table keeps a list of its snapshots, so you can see not only what the table looks like now, but also what it looked like at any earlier point.
+
+## Why it matters
+
+Snapshots give every table a built-in history. That makes it possible to:
+
+- **Look back in time.** Query a table exactly as it was last week or last month. This is often called *time travel*.
+- **Undo mistakes.** If bad data gets in, roll the table back to a snapshot from before the problem.
+- **Get consistent results.** A query reads from one snapshot from start to finish, so it isn't affected by changes that happen while it's running.
+- **Audit changes.** See when a table changed and compare one version with another.
+
+## How it works
+
+Video games let you save your progress at checkpoints. If something goes wrong, you load an earlier save and pick up from there, without replaying the whole game. Snapshots work in a similar way for tables.
+
+In practice:
+
+1. When data changes, Iceberg writes the new data files and records a new snapshot. This step is called a [commit](/wiki/commit/index.mdx).
+2. Each snapshot has an ID and a timestamp, and lists the data files that make up the table at that moment.
+3. The [catalog](/wiki/catalog/index.mdx) points to the table's current metadata, which marks the latest snapshot as current.
+4. Older snapshots stay in the table's history until they're cleaned up.
+
+Snapshots don't copy the whole table each time. A new snapshot reuses all the files that didn't change and only adds the new ones, so keeping history takes far less space than you might expect.
+
+To query an earlier version, you ask for the table as of a specific time or snapshot ID. In Trino, for example:
+
+```sql
+SELECT * FROM bookings
+FOR TIMESTAMP AS OF TIMESTAMP '2026-10-31 23:59:59 UTC';
+```
+
+Over time, old snapshots add up. Most teams *expire* snapshots after a set period, which removes them from the history and deletes files that no current snapshot still needs.
+
+## Example
+
+A pet-sitting business closes its books at the end of each month. In early November, the finance team needs to check October's numbers, but late cancellations and refunds have already changed the `bookings` table.
+
+Instead of trying to undo those changes by hand, they query the table as it was at midnight on October 31. They get exactly the data they reported at the time, while the live table stays up to date.
+
+## Snapshots in Airfoil
+
+Airfoil stores your data as Iceberg tables, so every change it writes creates a new snapshot. This means your Airfoil tables come with a history you can query, using any Iceberg-compatible tool.
+
+{/* TODO: confirm with Francesco how often Airfoil commits (and so creates snapshots), how long snapshots are kept, and whether the garbage collector expires them automatically. Link to the relevant product doc. */}
+
+## Related terms
+
+- [Commit](/wiki/commit/index.mdx): the step that creates a new snapshot
+- [Catalog](/wiki/catalog/index.mdx): the directory that points to each table's current version
+- [Apache Iceberg](/wiki/iceberg/index.mdx): the table format that snapshots are part of
+- [Table branching](/wiki/table-branching/index.mdx): working on a separate line of snapshots without affecting the main table
