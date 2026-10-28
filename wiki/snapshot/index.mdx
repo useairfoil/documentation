@@ -50,9 +50,9 @@ Instead of trying to undo those changes by hand, they query the table as it was 
 
 ## Snapshots in Airfoil
 
-Airfoil stores your data as Iceberg tables, so every change it writes creates a new snapshot. This means your Airfoil tables come with a history you can query, using any Iceberg-compatible tool.
+Airfoil stores your data as Iceberg tables. Every time a [connector](/wiki/connector/index.mdx) writes new data to a table, Airfoil commits the change, creating a new snapshot. This means your Airfoil tables come with a history you can query using any Iceberg-compatible tool.
 
-{/* TODO: confirm with Francesco how often Airfoil commits (and so creates snapshots), how long snapshots are kept, and whether the garbage collector expires them automatically. Link to the relevant product doc. */}
+Airfoil also expires old snapshots automatically and cleans up any files that are no longer needed. This keeps storage costs down, because you don't pay to store data that can't be accessed anymore.
 
 ## Related terms
 
