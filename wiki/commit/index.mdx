@@ -1,0 +1,54 @@
+---
+title: "What is a commit?"
+titleShort: "Commit"
+description: "A commit is the step that makes a change to a table official, all at once, creating a new version of the table."
+updatedAt: 2026-10-29 11:41
+---
+
+# What is a commit?
+
+A commit is the step that makes a change to a table official. In [Apache Iceberg](/wiki/iceberg/index.mdx), new data can be written in the background, but nobody sees it until it's committed. Once it is, the table moves to a new version, called a [snapshot](/wiki/snapshot/index.mdx).
+
+If you've used Git, the idea is similar: a commit records a complete set of changes as one new version.
+
+## Why it matters
+
+Changes to a table often involve many files at once. Commits make sure those changes are applied safely:
+
+- **All or nothing.** A commit either fully succeeds or doesn't happen at all, so readers never see half-written data.
+- **Consistent reads.** Queries keep reading the previous version until the commit is complete, then switch to the new one.
+- **Safe teamwork.** When two tools try to change the same table at once, commits stop one from overwriting the other's work.
+- **A clear history.** Every commit creates a snapshot, so you can see what changed and when.
+
+## How it works
+
+When you transfer money between two bank accounts, the money leaves one account and arrives in the other as a single action. You never end up with the money gone from both, or in both at once. A commit gives table changes that same guarantee.
+
+In practice:
+
+1. A tool writes the new data files to [object storage](/wiki/object-storage/index.mdx). At this point, they're invisible to everyone else.
+2. It writes a new metadata file that describes the table's next version, including the new files.
+3. It asks the [catalog](/wiki/catalog/index.mdx) to switch the table's pointer from the old metadata file to the new one. This switch is the commit, and it happens in a single step.
+4. From that moment, every query sees the new version.
+
+If two tools try to commit to the same table at the same moment, the catalog only accepts the first. The second tool sees that the table has changed, checks its work against the new version, and tries again. This way, no changes are lost.
+
+## Example
+
+A pet-sitting business imports thousands of bookings from its booking app every hour. One afternoon, the import fails halfway through because of a network error.
+
+Because the new data was never committed, the `bookings` table still shows the last complete version. The team's dashboard keeps showing accurate numbers, and the import simply runs again.
+
+## Commits in Airfoil
+
+Airfoil handles commits for you. Every time a [connector](/wiki/connector/index.mdx) writes new data to a table, Airfoil commits the change, creating a new snapshot. You don't need to manage commits yourself, and any Iceberg-compatible tool reading your tables always sees complete data.
+
+{/* TODO: confirm with Francesco whether to mention that Airfoil writes incoming data to a write ahead log before committing it to the table, and how often commits happen (e.g., batched every few seconds). Link to the relevant product doc. */}
+
+## Related terms
+
+- [Snapshot](/wiki/snapshot/index.mdx): the new version of a table that each commit creates
+- [Catalog](/wiki/catalog/index.mdx): the directory whose pointer a commit updates
+- [Apache Iceberg](/wiki/iceberg/index.mdx): the table format that uses commits to keep changes safe
+- [Write ahead log](/wiki/write-ahead-log/index.mdx): a record of changes kept before they're committed
+- [Durability](/wiki/durability/index.mdx): the guarantee that committed data isn't lost
