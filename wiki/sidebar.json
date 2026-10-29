@@ -17,7 +17,9 @@
       "items": [
         { "name": "Apache Iceberg", "type": "page", "path": "/iceberg" },
         { "name": "Catalog", "type": "page", "path": "/catalog" },
-        { "name": "Snapshot", "type": "page", "path": "/snapshot" }
+        { "name": "Snapshot", "type": "page", "path": "/snapshot" },
+        { "name": "Commit", "type": "page", "path": "/commit" },
+        { "name": "Table schema", "type": "page", "path": "/table-schema" }
       ]
     }
   ]
