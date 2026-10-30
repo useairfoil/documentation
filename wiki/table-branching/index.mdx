@@ -43,9 +43,9 @@ They load the bookings into a branch of the `bookings` table first. Checks on th
 
 ## Table branching in Airfoil
 
-{/* TODO: confirm with Francesco whether Airfoil supports Iceberg branches and tags (e.g., can customers create branches on Airfoil-managed tables, or use them from their own engines?). Link to the relevant product doc. */}
+Airfoil always writes your data to the table's `main` branch, so your connectors keep your tables up to date as usual.
 
-[How Airfoil supports table branching.]
+You can still create and manage your own branches using any Iceberg-compatible tool, such as Apache Spark. Branches are isolated from each other, so you can test changes or run experiments on a branch without affecting the data Airfoil writes to `main`.
 
 ## Related terms
 
