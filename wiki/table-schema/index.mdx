@@ -51,11 +51,11 @@ The `bookings` table's schema says `price_usd` must be a number, so the bad valu
 
 ## Table schemas in Airfoil
 
-Every Airfoil table is an Iceberg table with its own schema. When a [connector](/wiki/connector/index.mdx) brings in data, Airfoil creates tables with the right columns and types for that data, so it's ready to query.
+Every Airfoil table is an Iceberg table with its own schema. When you deploy a new [connector](/wiki/connector/index.mdx), Airfoil creates its tables, with the right columns and types for that data, so it's ready to query.
+
+Sources change over time, and Airfoil updates your schemas to match. Changes that are backward compatible, such as a new column being added, happen automatically and don't affect your existing queries. If a change isn't backward compatible, such as a column being removed, Airfoil asks you to approve it first. This gives you time to update any dashboards or queries that rely on the old schema. See [schema evolution strategies](/wiki/schema-evolution/index.mdx).
 
 Airfoil also annotates tables with descriptions of what they contain, so AI agents can understand your data and use it correctly.
-
-{/* TODO: confirm with Francesco: (1) are schemas created automatically from each connector's data, (2) how does Airfoil handle schema changes in the source, e.g., a new field appears, and (3) are column descriptions part of the annotations for AI agents? Link to the relevant product doc. */}
 
 ## Related terms
 
