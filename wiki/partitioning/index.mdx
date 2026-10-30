@@ -1,0 +1,68 @@
+---
+title: "What is partitioning?"
+titleShort: "Partitioning"
+description: "Partitioning groups a table's data into separate sections, such as by month, so queries only read the data they need."
+updatedAt: 2026-10-30 17:45
+---
+
+# What is partitioning?
+
+Partitioning is a way of dividing a table's data into separate groups, called *partitions*, based on the values in one or more columns. For example, a table of bookings might be partitioned by month, so each month's bookings are stored together.
+
+When a query only needs some of the data, such as last month's bookings, it can go straight to the right partition and skip the rest.
+
+## Why it matters
+
+Tables in a [data lake](/wiki/datalake/index.mdx) can grow to billions of rows. Reading all of that for every question is slow and expensive. Partitioning helps:
+
+- **Faster queries.** Queries skip partitions that can't contain matching rows, so they read far less data.
+- **Lower costs.** Many query engines charge by how much data they scan, so reading less costs less.
+- **Easier data management.** Old data can be archived or deleted one partition at a time.
+
+## How it works
+
+Open a well-kept filing cabinet and you'll find receipts sorted into folders by month. To find a receipt from March, you pull out the March folder. You don't need to look through the whole year.
+
+A partitioned table works the same way:
+
+1. When the table is created, you choose how to partition it, such as by the month of `booking_date`.
+2. As data is written, rows from the same partition are stored together in the same data files.
+3. When a query filters on that column, the engine works out which partitions could match and only reads those files. This is called *partition pruning*.
+
+[Apache Iceberg](/wiki/iceberg/index.mdx) adds two useful features:
+
+- **Hidden partitioning.** Iceberg works out partitions from your existing columns, using rules such as `year`, `month`, `day`, or `bucket`. You don't need to add extra columns or know how the table is partitioned. You just filter on `booking_date`, and Iceberg skips the right files.
+- **Partition evolution.** You can change how a table is partitioned, for example from monthly to daily, without rewriting the data that's already there.
+
+Here's how a table might be partitioned by month, using Spark SQL:
+
+```sql
+CREATE TABLE bookings (
+  booking_id   BIGINT,
+  service      STRING,
+  booking_date DATE,
+  price_usd    DECIMAL(10, 2)
+)
+PARTITIONED BY (month(booking_date));
+```
+
+Partitioning works best on columns you often filter by, like dates. Splitting a table into too many tiny partitions can make it slower, not faster, because the engine has to open many small files.
+
+## Example
+
+A pet-sitting business has five years of bookings in its `bookings` table, partitioned by month.
+
+When the team asks *"How many bookings did we have in October?"*, the query engine only reads October's partition. That's 1 month of data out of 60, so the answer comes back in seconds instead of minutes.
+
+## Partitioning in Airfoil
+
+Airfoil tables are Iceberg tables, so they support hidden partitioning and partition evolution.
+
+{/* TODO: confirm with Francesco: (1) how does Airfoil partition tables by default (e.g., by ingestion time), (2) can users choose or change the partitioning, and (3) should we mention that the compactor merges small files to keep queries fast? Link to the relevant product doc. */}
+
+## Related terms
+
+- [Sort column](/wiki/sort-column/index.mdx): how rows are ordered within files to speed up queries further
+- [Apache Iceberg](/wiki/iceberg/index.mdx): the table format that provides hidden partitioning
+- [Table schema](/wiki/table-schema/index.mdx): the columns a table can be partitioned by
+- [Object storage](/wiki/object-storage/index.mdx): where partitioned data files are stored
