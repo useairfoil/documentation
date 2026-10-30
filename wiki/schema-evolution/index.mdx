@@ -1,0 +1,61 @@
+---
+title: "What are schema evolution strategies?"
+titleShort: "Schema evolution strategies"
+description: "Schema evolution strategies are ways to change a table's structure over time without breaking the queries and dashboards that rely on it."
+updatedAt: 2026-10-30 17:37
+---
+
+# What are schema evolution strategies?
+
+*Schema evolution* is the process of changing a table's [schema](/wiki/table-schema/index.mdx) over time, for example by adding, renaming, or removing columns. Schema evolution strategies are the approaches teams use to make those changes safely, without breaking the queries, dashboards, and tools that rely on the table.
+
+## Why it matters
+
+Data sources rarely stay the same. Apps add features, SaaS tools add fields, and businesses change what they track. Each change can affect the tables built from that data:
+
+- **Avoid broken dashboards.** A removed or renamed column can make a report fail without warning.
+- **Keep data flowing.** A good strategy lets new fields arrive without stopping imports.
+- **Protect older data.** Rows written before a change should still be readable after it.
+- **Give people time.** Planned changes let teams update their queries before anything breaks.
+
+## How it works
+
+There's a reason cities give notice before closing a road. Opening a new road is easy, since nobody's route depends on it yet. But closing or renaming one means updating maps and signs, and giving drivers time to find another way. Schema changes work the same way.
+
+Changes fall into two groups:
+
+| | Backward compatible | Not backward compatible (breaking) |
+| --- | --- | --- |
+| **What it means** | Existing queries keep working | Existing queries may fail or return wrong results |
+| **Examples** | Adding a column, widening a number type (e.g., `int` to `long`) | Removing a column, renaming a column, changing a column's type to something narrower |
+
+Common strategies for handling them include:
+
+- **Add, don't remove.** Prefer adding new columns over changing or removing existing ones. This is the safest approach.
+- **Deprecate first.** When a column needs to go, announce it, keep it for a set period, and only remove it once nobody depends on it.
+- **Use flexible columns.** For fields that change often, store them in a [semi-structured](/wiki/semi-structured-data/index.mdx) column, so new fields don't need a schema change at all.
+- **Approve breaking changes.** Apply compatible changes automatically, but require a person to approve anything that could break existing queries.
+
+[Apache Iceberg](/wiki/iceberg/index.mdx) makes most schema changes cheap. Because it tracks every column by a hidden ID rather than by name, you can add, rename, or remove columns without rewriting any data. Older rows simply show an empty value for columns added after they were written.
+
+## Example
+
+A pet-sitting business starts taking bookings in other countries. Its booking app replaces the `price_usd` column with two new columns: `price` and `currency`.
+
+The finance team's revenue dashboard still reads `price_usd`, so removing it straight away would break the dashboard. Instead, the team keeps `price_usd` for a month while they switch the dashboard to the new columns. Once nothing uses it anymore, they remove it.
+
+## Schema evolution in Airfoil
+
+Airfoil handles schema changes for you. When a source changes, Airfoil updates the table's schema to match:
+
+- **Backward-compatible changes**, such as a new column, are applied automatically. You don't need to do anything, and your existing queries keep working.
+- **Breaking changes** need your approval first. This gives you time to update any dashboards or queries that depend on the old schema before the change is applied.
+
+{/* TODO: confirm with Francesco which changes count as breaking in Airfoil, and how users approve them (e.g., in the dashboard, via the API, or by notification). Link to the relevant product doc. */}
+
+## Related terms
+
+- [Table schema](/wiki/table-schema/index.mdx): the rules that define a table's columns and their types
+- [Semi-structured data](/wiki/semi-structured-data/index.mdx): data with a flexible shape that can absorb new fields
+- [Apache Iceberg](/wiki/iceberg/index.mdx): the table format that supports safe schema changes
+- [Connector](/wiki/connector/index.mdx): how data, and changes to its structure, arrive in Airfoil
