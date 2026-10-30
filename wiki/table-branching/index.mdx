@@ -1,0 +1,55 @@
+---
+title: "What is table branching?"
+titleShort: "Table branching"
+description: "Table branching lets you make changes to a separate version of a table, then check them before they reach the main table."
+updatedAt: 2026-10-29 11:57
+---
+
+# What is table branching?
+
+Table branching lets you create a separate, named version of a table, called a *branch*, and make changes to it without affecting the main table. When you're happy with the changes, you can publish them to the main table. If not, you can throw the branch away.
+
+If you've used Git, the idea is the same: you work on a branch, then merge it in when it's ready. In [Apache Iceberg](/wiki/iceberg/index.mdx), branches are built into the table format itself.
+
+## Why it matters
+
+Changes to important tables can be risky. Branching gives you a safe place to try them first:
+
+- **Test changes safely.** Load or update data on a branch, and the main table stays exactly as it was.
+- **Check data before anyone sees it.** Run quality checks on a branch, and only publish data that passes. This is often called *write-audit-publish*.
+- **Experiment freely.** Try a new import or a big cleanup without needing a full copy of the table.
+- **Keep important versions.** Mark key moments, such as the end of a quarter, so they're kept for as long as you need them.
+
+## How it works
+
+Say you run a restaurant and want to add a new dish. You try the recipe in the kitchen first, while customers keep ordering from the current menu. Only once the dish is right does it go on the menu.
+
+In Iceberg, a branch is simply a name that points to a line of [snapshots](/wiki/snapshot/index.mdx):
+
+1. Every table has a main branch, called `main`. This is what queries read by default.
+2. You create a new branch, such as `audit`, starting from the table's current snapshot.
+3. Changes [committed](/wiki/commit/index.mdx) to the `audit` branch create new snapshots on that branch only. Queries on `main` don't see them.
+4. Once the changes are checked, you move `main` forward to the branch's latest snapshot. The changes are now live for everyone.
+
+Branches don't copy the table. They share all the existing data files and only add files for the new changes, so they're quick to create and cheap to keep.
+
+Iceberg also supports *tags*: fixed names for a single snapshot, such as `end-of-q3`. A tag never moves, so it's a simple way to keep an important version of a table.
+
+## Example
+
+A pet-sitting business takes over a smaller company and needs to import its 10,000 past bookings. The team isn't sure how clean the data is.
+
+They load the bookings into a branch of the `bookings` table first. Checks on the branch find 300 duplicate bookings, which they remove. Only then do they publish the branch to `main`, so their reports never show the bad data.
+
+## Table branching in Airfoil
+
+Airfoil always writes your data to the table's `main` branch, so your connectors keep your tables up to date as usual.
+
+You can still create and manage your own branches using any Iceberg-compatible tool, such as Apache Spark. Branches are isolated from each other, so you can test changes or run experiments on a branch without affecting the data Airfoil writes to `main`.
+
+## Related terms
+
+- [Snapshot](/wiki/snapshot/index.mdx): a saved version of a table that branches point to
+- [Commit](/wiki/commit/index.mdx): the step that adds a new snapshot to a branch
+- [Apache Iceberg](/wiki/iceberg/index.mdx): the table format that supports branches and tags
+- [Table lineage](/wiki/table-lineage/index.mdx): how a table's data has changed and where it came from
