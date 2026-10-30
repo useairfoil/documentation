@@ -1,0 +1,66 @@
+---
+title: "What is a table schema?"
+titleShort: "Table schema"
+description: "A table schema is the set of rules that defines a table's columns, their names, and the type of data each one holds."
+updatedAt: 2026-10-29 11:50
+---
+
+# What is a table schema?
+
+A table schema is the set of rules that defines what a table looks like. It lists every column in the table, the name of each column, and the type of data it holds, such as text, a number, or a date.
+
+Every [structured](/wiki/structured-data/index.mdx) table has a schema. It's what lets tools understand the data without having to guess.
+
+## Why it matters
+
+The schema is the agreement between the people and tools writing data and those reading it:
+
+- **Clean data.** A column set to hold dates only accepts dates, so typos and mismatched values are caught early.
+- **Fast, accurate queries.** Tools know exactly what each column contains, so they can filter, sort, and add up values correctly.
+- **Shared understanding.** Everyone using the table, from analysts to AI agents, works from the same definition of what each column means.
+- **Room to grow.** A schema can change over time, for example to add a new column, without breaking the data that's already there.
+
+## How it works
+
+A schema does for a table what a blueprint does for a house. Before anything is built, the blueprint sets out each room, its size, and what it's for. The builders follow it, and anyone who looks at it later knows how the house is laid out.
+
+A schema usually defines, for each column:
+
+- **A name**, such as `booking_date`.
+- **A data type**, such as text (`string`), whole number (`long`), date, or amount (`decimal`).
+- **Whether it's required**, meaning every row must have a value, or whether it can be left empty.
+
+Here's a simple schema for a `bookings` table:
+
+| Column | Type | Required? |
+| --- | --- | --- |
+| `booking_id` | long | Yes |
+| `customer_id` | long | Yes |
+| `service` | string | Yes |
+| `booking_date` | date | Yes |
+| `price_usd` | decimal | Yes |
+| `notes` | string | No |
+
+In [Apache Iceberg](/wiki/iceberg/index.mdx), the schema is stored in the table's metadata, alongside its [snapshots](/wiki/snapshot/index.mdx). Iceberg gives every column a hidden ID as well as a name, so you can rename, add, or remove columns safely, without rewriting the data. This is known as *schema evolution*. See [schema evolution strategies](/wiki/schema-evolution/index.mdx).
+
+## Example
+
+A pet-sitting business adds a new booking form to its website. Because of a bug, the form sends the price as the text `"twenty-five"` instead of the number `25`.
+
+The `bookings` table's schema says `price_usd` must be a number, so the bad value is rejected instead of quietly saved. The team spots the bug straight away, and their revenue reports stay accurate.
+
+## Table schemas in Airfoil
+
+Every Airfoil table is an Iceberg table with its own schema. When you deploy a new [connector](/wiki/connector/index.mdx), Airfoil creates its tables, with the right columns and types for that data, so it's ready to query.
+
+Sources change over time, and Airfoil updates your schemas to match. Changes that are backward compatible, such as a new column being added, happen automatically and don't affect your existing queries. If a change isn't backward compatible, such as a column being removed, Airfoil asks you to approve it first. This gives you time to update any dashboards or queries that rely on the old schema. See [schema evolution strategies](/wiki/schema-evolution/index.mdx).
+
+Airfoil also annotates tables with descriptions of what they contain, so AI agents can understand your data and use it correctly.
+
+## Related terms
+
+- [Structured data](/wiki/structured-data/index.mdx): data organized into rows and columns that follow a schema
+- [Semi-structured data](/wiki/semi-structured-data/index.mdx): data with labels but no fixed schema, like JSON
+- [Schema evolution strategies](/wiki/schema-evolution/index.mdx): ways to change a schema over time
+- [Identity column](/wiki/identity-column/index.mdx): a column that uniquely identifies each row
+- [Apache Iceberg](/wiki/iceberg/index.mdx): the table format that stores and tracks schemas
