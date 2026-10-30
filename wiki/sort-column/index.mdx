@@ -1,0 +1,61 @@
+---
+title: "What is a sort column?"
+titleShort: "Sort column"
+description: "A sort column is a column used to order the rows inside a table's data files, so queries can skip files that don't contain matching values."
+updatedAt: 2026-10-30 17:49
+---
+
+# What is a sort column?
+
+A sort column is a column that a table uses to put its rows in order when it writes them to data files. For example, a `bookings` table sorted by `customer_id` stores bookings for the same customer next to each other.
+
+A table can have more than one sort column. Together, they make up the table's *sort order*.
+
+## Why it matters
+
+Sorting makes it easier for query engines to find what they need and skip what they don't:
+
+- **Faster lookups.** Queries that filter on a sort column can skip most of the table's files.
+- **Lower costs.** Reading fewer files means less data scanned and less time spent computing.
+- **Works alongside partitioning.** [Partitioning](/wiki/partitioning/index.mdx) splits data into groups, and sorting puts rows in order within each group, so the two combine well.
+- **Smaller files.** Similar values stored together compress better, which can reduce storage costs.
+
+## How it works
+
+Anyone who's looked up a word in a dictionary knows you don't start at page one. Because the words are in alphabetical order, you can open it near the right letter and quickly narrow it down. A sort column gives a table the same shortcut.
+
+Here's what happens in [Apache Iceberg](/wiki/iceberg/index.mdx):
+
+1. You set a sort order for the table, such as by `customer_id`.
+2. When data is written, rows are sorted by that column before they're saved to data files.
+3. For every data file, Iceberg records the lowest and highest value of each column.
+4. When a query filters on `customer_id`, the engine checks those ranges and only opens files that could contain a match.
+
+Without sorting, every file might hold a mix of all customers, so every file has to be read. With sorting, each file covers a narrow range of customers, and most files can be skipped.
+
+Here's how to set a sort order using Spark SQL:
+
+```sql
+ALTER TABLE bookings WRITE ORDERED BY customer_id;
+```
+
+Sorting adds a little extra work when data is written, so it's best used on columns you often filter by. A good sort column is usually one that isn't already used for partitioning, such as an ID.
+
+## Example
+
+A pet-sitting business partitions its `bookings` table by month and sorts it by `customer_id`.
+
+When a customer calls with a question, the support team looks up all of that customer's bookings. Within each month, the query engine only needs to open the one or two files that cover that customer's ID, instead of every file in the table.
+
+## Sort columns in Airfoil
+
+Airfoil tables are Iceberg tables, so any Iceberg-compatible engine can use their sort order to skip files when querying.
+
+{/* TODO: confirm with Francesco: (1) does Airfoil set a sort order on tables by default (e.g., by primary key), (2) can users choose their own sort columns, and (3) does the compactor re-sort data when it merges small files? Link to the relevant product doc. */}
+
+## Related terms
+
+- [Partitioning](/wiki/partitioning/index.mdx): grouping a table's data so queries can skip whole sections
+- [Identity column](/wiki/identity-column/index.mdx): a column that uniquely identifies each row, often a good sort column
+- [Apache Iceberg](/wiki/iceberg/index.mdx): the table format that tracks sort orders and file statistics
+- [Table schema](/wiki/table-schema/index.mdx): the columns a table can be sorted by
