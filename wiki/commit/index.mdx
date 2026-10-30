@@ -41,9 +41,12 @@ Because the new data was never committed, the `bookings` table still shows the l
 
 ## Commits in Airfoil
 
-Airfoil handles commits for you. Every time a [connector](/wiki/connector/index.mdx) writes new data to a table, Airfoil commits the change, creating a new snapshot. You don't need to manage commits yourself, and any Iceberg-compatible tool reading your tables always sees complete data.
+Airfoil handles commits for you. As [connectors](/wiki/connector/index.mdx) bring in new data, Airfoil commits it to your tables at a regular interval, creating a new snapshot each time. You don't need to manage commits yourself, and any Iceberg-compatible tool reading your tables always sees complete data.
 
-{/* TODO: confirm with Francesco whether to mention that Airfoil writes incoming data to a write ahead log before committing it to the table, and how often commits happen (e.g., batched every few seconds). Link to the relevant product doc. */}
+You can set the commit interval anywhere from 15 seconds to 15 minutes. Choose it based on your use case:
+
+- **Shorter intervals** make new data available sooner, which suits dashboards or AI agents that need up-to-date information.
+- **Longer intervals** keep costs down, which suits reports and analysis where a few minutes' delay doesn't matter.
 
 ## Related terms
 
