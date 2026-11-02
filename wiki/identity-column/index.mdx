@@ -2,7 +2,7 @@
 title: "What is an identity column?"
 titleShort: "Identity column"
 description: "An identity column, or primary key, is a column whose value uniquely identifies each row in a table."
-updatedAt: 2026-11-02 10:50
+updatedAt: 2026-11-02 17:36
 ---
 
 # What is an identity column?
@@ -42,9 +42,11 @@ Later, one Alex cancels a booking. The booking app sends the change with `bookin
 
 ## Identity columns in Airfoil
 
-Airfoil uses each table's primary key to keep your data accurate. When a [connector](/wiki/connector/index.mdx) sends a record that already exists, Airfoil updates it instead of adding a duplicate, so each table always holds the latest version of every record.
+Airfoil uses each table's primary key to keep your data accurate. When you deploy a [connector](/wiki/connector/index.mdx), it creates its tables with the correct primary key already set. Airfoil needs this key for [deduplication](/wiki/deduplication/index.mdx): when a connector sends a record that already exists, Airfoil updates it instead of adding a duplicate, so each table always holds the latest version of every record.
 
-{/* TODO: confirm with Francesco: (1) do connectors set each table's primary key automatically, (2) can users change it, and (3) does Airfoil support partial updates, where a source only sends the fields that changed? Link to the relevant product doc. */}
+You must not change a table's primary key. If it's changed, Airfoil stops writing to the table, so it never publishes inconsistent data.
+
+{/* TODO: link to the relevant product doc once it exists. */}
 
 ## Related terms
 
