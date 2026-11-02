@@ -18,12 +18,12 @@
         { "name": "Apache Iceberg", "type": "page", "path": "/iceberg" },
         { "name": "Catalog", "type": "page", "path": "/catalog" },
         { "name": "Snapshot", "type": "page", "path": "/snapshot" },
-           { "name": "Apache Iceberg", "type": "page", "path": "/iceberg" },
-           { "name": "Catalog", "type": "page", "path": "/catalog" },
-           { "name": "Snapshot", "type": "page", "path": "/snapshot" },
-           { "name": "Commit", "type": "page", "path": "/commit" },
-           { "name": "Table schema", "type": "page", "path": "/table-schema" },
-           { "name": "Table branching", "type": "page", "path": "/table-branching" }
+        { "name": "Commit", "type": "page", "path": "/commit" },
+        { "name": "Table schema", "type": "page", "path": "/table-schema" },
+        { "name": "Table branching", "type": "page", "path": "/table-branching" },
+        { "name": "Schema evolution strategies", "type": "page", "path": "/schema-evolution" },
+        { "name": "Partitioning", "type": "page", "path": "/partitioning" },
+        { "name": "Sort column", "type": "page", "path": "/sort-column" }
       ]
     }
   ]
