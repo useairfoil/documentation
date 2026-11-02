@@ -49,9 +49,11 @@ When a customer calls with a question, the support team looks up all of that cus
 
 ## Sort columns in Airfoil
 
-Airfoil tables are Iceberg tables, so any Iceberg-compatible engine can use their sort order to skip files when querying.
+Airfoil supports sort columns. When you deploy a [connector](/wiki/connector/index.mdx), Airfoil creates its tables with a recommended sort order, chosen to suit that data. You can change the sort order if your queries would benefit from a different one.
 
-{/* TODO: confirm with Francesco: (1) does Airfoil set a sort order on tables by default (e.g., by primary key), (2) can users choose their own sort columns, and (3) does the compactor re-sort data when it merges small files? Link to the relevant product doc. */}
+Because Airfoil tables are Iceberg tables, any Iceberg-compatible engine can use the sort order to skip files when querying.
+
+{/* TODO: link to the product doc on changing a table's sort order once it exists. */}
 
 ## Related terms
 
