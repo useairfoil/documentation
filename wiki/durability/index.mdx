@@ -1,0 +1,54 @@
+---
+title: "What is durability?"
+titleShort: "Durability"
+description: "Durability is the guarantee that once data has been saved, it won't be lost, even if a system crashes or hardware fails."
+updatedAt: 2026-11-02 17:41
+---
+
+# What is durability?
+
+Durability is the guarantee that once a system confirms your data has been saved, it stays saved. A crash, a power cut, or a failed disk won't make it disappear.
+
+It's one of the four ACID properties that describe reliable databases: atomicity, consistency, isolation, and durability.
+
+## Why it matters
+
+Businesses make decisions and promises based on their data. If saved data can quietly vanish, nothing built on it can be trusted:
+
+- **Confirmed means confirmed.** When a payment or booking is recorded, it stays recorded.
+- **Recovery after failures.** Systems can restart after a crash and pick up exactly where they left off.
+- **Trustworthy reports.** Numbers don't change because data went missing.
+- **Fewer manual fixes.** Teams don't have to find and re-enter lost records.
+
+## How it works
+
+Writing a phone number on your hand and saving it in your phone feel the same in the moment. But the first washes off by evening. The second survives even if you lose your phone, because it's backed up. Durability is about making sure data is saved the second way.
+
+Systems make data durable in a few ways:
+
+1. **Save before confirming.** Data is written to permanent storage, such as disk, before the system reports it as saved. A [write ahead log](/wiki/write-ahead-log/index.mdx) is a common way to do this quickly.
+2. **Keep several copies.** Data is copied to multiple disks, often in different buildings, so one failure can't destroy it.
+3. **Apply changes completely.** Changes are applied all at once, using a [commit](/wiki/commit/index.mdx), so a crash can't leave data half-saved.
+
+[Object storage](/wiki/object-storage/index.mdx) services such as Amazon S3 are built for durability. They automatically store copies of every file across several locations. S3, for example, is designed so that the chance of losing a stored file in a given year is close to zero.
+
+Durability is often confused with *availability*, but they're different. Durability means your data isn't lost. Availability means you can reach it right now. During an outage, data can be temporarily unavailable but still perfectly durable, safe and waiting for the service to come back.
+
+## Example
+
+A pet-sitting business takes a booking and payment at 9:58 p.m. At 10:00 p.m., one of the disks in its cloud provider's data center fails.
+
+Because the booking was saved to durable storage, with copies on other disks, nothing is lost. The customer gets their pet sitter, and the payment still shows up in the morning's revenue report.
+
+## Durability in Airfoil
+
+Airfoil is built for durability. Incoming data is saved to a write ahead log in object storage before it's confirmed, and then committed to your Iceberg tables, which are also stored in object storage. This means your data benefits from the durability of object storage from the moment it arrives.
+
+{/* TODO: confirm with Francesco that Airfoil confirms writes to connectors only after the data is in the WAL, and whether to mention anything else (e.g., how the engine recovers after a crash). Link to the Architecture product doc. */}
+
+## Related terms
+
+- [Write ahead log](/wiki/write-ahead-log/index.mdx): a record that saves changes before they're applied
+- [Commit](/wiki/commit/index.mdx): the step that applies changes to a table all at once
+- [Object storage](/wiki/object-storage/index.mdx): low-cost storage designed to keep data safe
+- [Snapshot](/wiki/snapshot/index.mdx): a saved version of a table that can be restored
