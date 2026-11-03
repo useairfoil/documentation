@@ -46,9 +46,9 @@ A data pipeline collects new data from all three every few minutes and loads it 
 
 Airfoil handles the data pipeline for you. [Connectors](/wiki/connector/index.mdx) and the [API](/wiki/api/index.mdx) bring data in from your sources, and Airfoil writes it to Iceberg tables in object storage. Along the way, it [deduplicates](/wiki/deduplication/index.mdx) records, updates [schemas](/wiki/schema-evolution/index.mdx) as sources change, and commits new data at your chosen interval.
 
-This means you don't need to build or maintain your own pipelines to get your data into a data lake.
+This means you don't need to build or maintain your own pipelines to get data into your data lake. And because your tables use the open Iceberg format, it's easy to use them in your own pipelines afterward, for example with a tool like dbt Core, to build richer tables.
 
-{/* TODO: confirm with Francesco whether Airfoil does any transformations beyond deduplication and schema changes, or whether customers transform data afterward with their own tools (ELT). Link to the relevant product doc. */}
+{/* TODO: link to the relevant product doc once it exists. */}
 
 ## Related terms
 
