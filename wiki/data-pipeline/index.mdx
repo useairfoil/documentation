@@ -1,0 +1,58 @@
+---
+title: "What is a data pipeline?"
+titleShort: "Data pipeline"
+description: "A data pipeline is a series of steps that moves data from where it's created to where it can be used, such as a data lake."
+updatedAt: 2026-11-03 14:15
+---
+
+# What is a data pipeline?
+
+A data pipeline is a series of automated steps that moves data from where it's created to where it's needed. It collects data from sources such as apps, databases, and SaaS tools, and delivers it to a destination such as a [data lake](/wiki/datalake/index.mdx), ready to be analyzed.
+
+Along the way, a pipeline might also clean, combine, or reshape the data.
+
+## Why it matters
+
+Most businesses have data spread across many tools. Pipelines bring it together:
+
+- **One place for everything.** Data from every tool ends up in the same place, so it can be queried together.
+- **Always up to date.** Pipelines run automatically, on a schedule or continuously, so nobody has to export spreadsheets by hand.
+- **Consistent data.** Every run applies the same steps, so data is cleaned and organized the same way each time.
+- **Ready for analysis and AI.** Analysts, dashboards, and AI agents can all work from the same reliable data.
+
+## How it works
+
+Behind every kitchen tap is a whole network of pipes. Water is collected from a reservoir, cleaned at a treatment plant, and carried to your home, so it's ready to use the moment you turn the tap. A data pipeline does the same job for data.
+
+Most pipelines have three main stages:
+
+1. **Extract.** Data is collected from its sources, often through an [API](/wiki/api/index.mdx) or a [connector](/wiki/connector/index.mdx).
+2. **Transform.** Data is cleaned and reshaped, for example by removing duplicates or converting dates to the same format.
+3. **Load.** Data is written to its destination, such as a data lake or data warehouse.
+
+When these steps happen in that order, it's called *ETL*. Many modern pipelines use *ELT* instead: they load the raw data first, then transform it inside the destination. This keeps the original data available and makes it easier to change transformations later.
+
+Pipelines can move data in scheduled batches or continuously as it's created. See [streaming vs. batch](/wiki/streaming-vs-batch/index.mdx).
+
+Building pipelines yourself takes ongoing work. Sources change their APIs, add new fields, limit how much data you can request, or go offline. Each of these can break a pipeline, so teams often spend a lot of time just keeping their pipelines running.
+
+## Example
+
+A pet-sitting business stores payments in Stripe, bookings in its own app, and support tickets in Zendesk.
+
+A data pipeline collects new data from all three every few minutes and loads it into the company's data lake. Now the team can answer questions that span all three tools, such as *"Do customers who contact support book again less often?"*
+
+## Data pipelines in Airfoil
+
+Airfoil handles the data pipeline for you. [Connectors](/wiki/connector/index.mdx) and the [API](/wiki/api/index.mdx) bring data in from your sources, and Airfoil writes it to Iceberg tables in object storage. Along the way, it [deduplicates](/wiki/deduplication/index.mdx) records, updates [schemas](/wiki/schema-evolution/index.mdx) as sources change, and commits new data at your chosen interval.
+
+This means you don't need to build or maintain your own pipelines to get data into your data lake. And because your tables use the open Iceberg format, it's easy to use them in your own pipelines afterward, for example with a tool like dbt Core, to build richer tables.
+
+{/* TODO: link to the relevant product doc once it exists. */}
+
+## Related terms
+
+- [Connector](/wiki/connector/index.mdx): a ready-made integration that brings data in from a source
+- [Streaming vs. batch](/wiki/streaming-vs-batch/index.mdx): two ways a pipeline can move data
+- [Deduplication](/wiki/deduplication/index.mdx): removing repeated copies of the same record
+- [Data lake](/wiki/datalake/index.mdx): a common destination for data pipelines
