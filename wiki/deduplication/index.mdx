@@ -1,0 +1,63 @@
+---
+title: "What is deduplication?"
+titleShort: "Deduplication"
+description: "Deduplication makes sure each record appears only once in a table, keeping the latest version when the same record arrives more than once."
+updatedAt: 2026-11-03 13:38
+---
+
+# What is deduplication?
+
+Deduplication is the process of making sure each record appears only once in a table. When the same record arrives more than once, deduplication keeps a single copy instead of storing it twice.
+
+Often, the "same record" isn't an exact copy. It's a newer version, such as a booking that's changed from "confirmed" to "cancelled". In that case, deduplication keeps the latest version and replaces the older one.
+
+## Why it matters
+
+Duplicates are easy to create and hard to spot. They quietly make reports wrong:
+
+- **Accurate numbers.** A payment stored twice doubles the revenue it adds to a report.
+- **Up-to-date records.** Without deduplication, old and new versions of the same record sit side by side, and it's unclear which one is right.
+- **Less cleanup.** Teams don't need to write extra queries to filter out repeats.
+- **Lower costs.** Storing and scanning the same data twice wastes money.
+
+## How it works
+
+You'd never write a guest's name on a wedding guest list twice. If someone replies "yes" and later writes back to say they're bringing a plus-one, you update their entry. You don't add a second one. Deduplication does the same for a table.
+
+Duplicates usually happen for ordinary reasons:
+
+- **Retries.** If a connection drops, a tool often sends the same data again to be safe.
+- **Overlapping imports.** Two syncs might both pick up records from the same time window.
+- **Updates.** Many sources send the whole record again every time it changes.
+
+To deduplicate, a system needs a way to tell whether two records are the same. That's the job of the table's [identity column](/wiki/identity-column/index.mdx), or primary key, such as `booking_id`:
+
+1. A new record arrives.
+2. The system checks whether a record with the same key already exists.
+3. If it doesn't, the record is added as a new row.
+4. If it does, the existing row is replaced with the newer version.
+
+This "update or insert" step is often called an *upsert*.
+
+## Example
+
+A pet-sitting business takes a $40 payment for a cat-sitting booking. The payment is first recorded as "pending", then a minute later as "succeeded". Because of a network hiccup, the "succeeded" update is also sent twice.
+
+Without deduplication, the `payments` table would hold three rows for one payment, and the revenue report would show $120. With deduplication, there's one row, marked "succeeded", and the report correctly shows $40.
+
+## Deduplication in Airfoil
+
+Airfoil deduplicates your data automatically. Each table created by a [connector](/wiki/connector/index.mdx) has an identity column, and Airfoil uses it to keep only the latest version of every record. You don't need to write any queries to remove duplicates. Your tables are always clean and up to date.
+
+This is why the identity column is required and shouldn't be changed: Airfoil relies on it to know which records are the same.
+
+Support for *partial updates*, where a source only sends the fields that changed instead of the whole record, is planned for a future release.
+
+{/* TODO: confirm with Francesco how Airfoil decides which version is the latest (e.g., arrival order or an updated-at field), and whether there's anything else he wants this page to cover. Link to the relevant product doc. */}
+
+## Related terms
+
+- [Identity column](/wiki/identity-column/index.mdx): the column that tells Airfoil which records are the same
+- [Connector](/wiki/connector/index.mdx): how records, and updates to them, arrive in Airfoil
+- [Data pipeline](/wiki/data-pipeline/index.mdx): the steps that move data from sources to tables
+- [Write ahead log](/wiki/write-ahead-log/index.mdx): where incoming records are saved before they're committed
