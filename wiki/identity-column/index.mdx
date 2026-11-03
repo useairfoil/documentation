@@ -1,0 +1,56 @@
+---
+title: "What is an identity column?"
+titleShort: "Identity column"
+description: "An identity column, or primary key, is a column whose value uniquely identifies each row in a table."
+updatedAt: 2026-11-02 17:36
+---
+
+# What is an identity column?
+
+An identity column is a column whose value is different for every row in a table, so it can be used to tell rows apart. It's more commonly known as a *primary key*. In a `bookings` table, for example, the `booking_id` column identifies each booking.
+
+Sometimes no single column is unique on its own. In that case, two or more columns can be combined to form the key, such as `customer_id` and `pet_name` together.
+
+## Why it matters
+
+Without a reliable way to identify each row, it's hard to keep data accurate:
+
+- **Updates go to the right row.** When a booking changes, the key tells you exactly which row to update.
+- **No duplicates.** If the same record arrives twice, the key shows it's already there. See [deduplication](/wiki/deduplication/index.mdx).
+- **Tables can connect.** A `bookings` table can store a `customer_id`, which links each booking to the right row in the `customers` table.
+- **Fast lookups.** Finding a single record by its key is quick and unambiguous.
+
+## How it works
+
+Just as every passport has its own number, every row has its own key. Two people can share a name, a birthday, or a hometown, but never a passport number. That's what lets a border officer be sure they're looking at the right person.
+
+A good identity column is:
+
+1. **Unique.** No two rows share the same value.
+2. **Always filled in.** Every row has a value, because a missing key can't identify anything.
+3. **Stable.** The value never changes, even if other details about the record do.
+
+That's why keys are usually IDs, like `booking_id` or `customer_id`, rather than details like names or email addresses, which can be shared or can change.
+
+In [Apache Iceberg](/wiki/iceberg/index.mdx), a table's key columns are called *identifier fields* and are recorded in its [schema](/wiki/table-schema/index.mdx). Iceberg itself doesn't stop duplicate keys from being written. Instead, the tools that write to the table use the key to decide whether to add a new row or update an existing one. This is often called an *upsert*, short for "update or insert".
+
+## Example
+
+A pet-sitting business has two customers called Alex Kim. Their names are identical, but their `customer_id` values, 1042 and 2178, are not, so each booking is linked to the right person.
+
+Later, one Alex cancels a booking. The booking app sends the change with `booking_id` 5531. Because that ID already exists, the existing row is updated to "cancelled", instead of a second copy of the booking being added.
+
+## Identity columns in Airfoil
+
+Airfoil uses each table's primary key to keep your data accurate. When you deploy a [connector](/wiki/connector/index.mdx), it creates its tables with the correct primary key already set. Airfoil needs this key for [deduplication](/wiki/deduplication/index.mdx): when a connector sends a record that already exists, Airfoil updates it instead of adding a duplicate, so each table always holds the latest version of every record.
+
+You must not change a table's primary key. If it's changed, Airfoil stops writing to the table, so it never publishes inconsistent data.
+
+{/* TODO: link to the relevant product doc once it exists. */}
+
+## Related terms
+
+- [Deduplication](/wiki/deduplication/index.mdx): removing repeated copies of the same record
+- [Table schema](/wiki/table-schema/index.mdx): the rules that define a table's columns, including its key
+- [Sort column](/wiki/sort-column/index.mdx): a column used to order rows, often the primary key
+- [Connector](/wiki/connector/index.mdx): how records, and updates to them, arrive in Airfoil
