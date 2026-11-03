@@ -23,7 +23,8 @@
         { "name": "Table branching", "type": "page", "path": "/table-branching" },
         { "name": "Schema evolution strategies", "type": "page", "path": "/schema-evolution" },
         { "name": "Partitioning", "type": "page", "path": "/partitioning" },
-        { "name": "Sort column", "type": "page", "path": "/sort-column" }
+        { "name": "Sort column", "type": "page", "path": "/sort-column" },
+        { "name": "Identity column", "type": "page", "path": "/identity-column" }
       ]
     }
   ]
