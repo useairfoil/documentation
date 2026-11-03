@@ -51,9 +51,9 @@ Airfoil deduplicates your data automatically. Each table created by a [connector
 
 This is why the identity column is required and shouldn't be changed: Airfoil relies on it to know which records are the same.
 
-Support for *partial updates*, where a source only sends the fields that changed instead of the whole record, is planned for a future release.
+To decide which version is the latest, Airfoil uses the table's *version column*, if it has one. This is a column, usually an "updated at" timestamp, that's marked in the table's [schema](/wiki/table-schema/index.mdx). When two rows have the same primary key, the one with the highest value in the version column is kept, so an older update that arrives late can't overwrite a newer one. If a table doesn't have a version column, the row that arrived most recently is kept.
 
-{/* TODO: confirm with Francesco how Airfoil decides which version is the latest (e.g., arrival order or an updated-at field), and whether there's anything else he wants this page to cover. Link to the relevant product doc. */}
+{/* TODO: link to the relevant product doc once it exists. */}
 
 ## Related terms
 
