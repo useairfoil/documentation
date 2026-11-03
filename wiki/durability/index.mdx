@@ -44,7 +44,7 @@ Because the booking was saved to durable storage, with copies on other disks, no
 
 Airfoil is built for durability. Incoming data is saved to a write ahead log in object storage before it's confirmed, and then committed to your Iceberg tables, which are also stored in object storage. This means your data benefits from the durability of object storage from the moment it arrives.
 
-{/* TODO: confirm with Francesco that Airfoil confirms writes to connectors only after the data is in the WAL, and whether to mention anything else (e.g., how the engine recovers after a crash). Link to the Architecture product doc. */}
+{/* TODO: link to the Architecture product doc once it exists. */}
 
 ## Related terms
 
