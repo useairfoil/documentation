@@ -1,0 +1,55 @@
+---
+title: "What is a write ahead log?"
+titleShort: "Write ahead log"
+description: "A write ahead log (WAL) is a record where changes are saved first, before they're applied to a table, so no data is lost if something fails."
+updatedAt: 2026-11-02 17:48
+---
+
+# What is a write ahead log?
+
+A write ahead log (WAL) is a record where new data and changes are saved *before* they're applied to the main data store. Each change is added to the end of the log as soon as it arrives. The changes are then applied to the table afterward, often in batches.
+
+Because every change is safely written down first, nothing is lost if a system crashes partway through. This idea is used by many databases, including PostgreSQL.
+
+## Why it matters
+
+A write ahead log helps a system be both fast and reliable:
+
+- **No lost data.** Once a change is in the log, it can be recovered after a crash or restart.
+- **Fast writes.** Adding to the end of a log is quick, so new data can be accepted straight away.
+- **Efficient updates.** Changes can be collected and applied to the table together, which is faster and cheaper than applying them one by one.
+- **A clear order.** The log records changes in the order they arrived, so they can be applied in exactly that order.
+
+## How it works
+
+Long before computers, shopkeepers kept a daybook. Every sale was jotted down the moment it happened, then copied into the main accounts book at the end of the day. If the accounts book was ever wrong, or the shop closed before it was updated, the daybook still had a record of every sale.
+
+A write ahead log works the same way:
+
+1. New data arrives and is added to the end of the log. At this point, it's stored safely.
+2. The system confirms to the sender that the data has been received.
+3. Later, changes from the log are applied to the main table. In [Apache Iceberg](/wiki/iceberg/index.mdx), this is done with a [commit](/wiki/commit/index.mdx).
+4. Once the changes are in the table, the log entries they came from are no longer needed and can be cleaned up.
+
+If the system crashes between steps 1 and 3, it reads the log when it restarts and applies anything that's missing. This is what makes the data [durable](/wiki/durability/index.mdx).
+
+## Example
+
+A pet-sitting business streams new bookings from its app to its data lake, which commits new data every five minutes.
+
+Three minutes into one of those windows, the server restarts. Forty bookings have arrived but haven't been committed yet. Because each one was saved to the write ahead log as it came in, none of them are lost. When the server is back up, the bookings are committed to the `bookings` table as normal.
+
+## Write ahead logs in Airfoil
+
+Airfoil's storage engine uses a write ahead log. When a [connector](/wiki/connector/index.mdx) sends new data, Airfoil saves it to the log in [object storage](/wiki/object-storage/index.mdx) straight away. Then, at your chosen commit interval, Airfoil commits the data to your Iceberg tables.
+
+This means your data is safe from the moment it arrives. You can query it once it's been committed to your tables, at the end of each commit interval.
+
+{/* TODO: link to the Architecture product doc once it exists. */}
+
+## Related terms
+
+- [Commit](/wiki/commit/index.mdx): the step that applies changes from the log to a table
+- [Durability](/wiki/durability/index.mdx): the guarantee that data isn't lost once it's been saved
+- [Object storage](/wiki/object-storage/index.mdx): where Airfoil stores its write ahead log
+- [Connector](/wiki/connector/index.mdx): how new data arrives in Airfoil
