@@ -43,9 +43,9 @@ Three minutes into one of those windows, the server restarts. Forty bookings hav
 
 Airfoil's storage engine uses a write ahead log. When a [connector](/wiki/connector/index.mdx) sends new data, Airfoil saves it to the log in [object storage](/wiki/object-storage/index.mdx) straight away. Then, at your chosen commit interval, Airfoil commits the data to your Iceberg tables.
 
-This means your data is safe from the moment it arrives, even before it appears in your tables.
+This means your data is safe from the moment it arrives. You can query it once it's been committed to your tables, at the end of each commit interval.
 
-{/* TODO: confirm with Francesco: (1) is this flow accurate, (2) is the WAL stored in object storage, and (3) can data in the WAL be queried before it's committed? Link to the Architecture product doc. */}
+{/* TODO: link to the Architecture product doc once it exists. */}
 
 ## Related terms
 
