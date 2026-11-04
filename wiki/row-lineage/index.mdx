@@ -1,0 +1,55 @@
+---
+title: "What is row lineage?"
+titleShort: "Row lineage"
+description: "Row lineage tracks each row in a table over time, so you can tell exactly which rows have changed and when."
+updatedAt: 2026-11-04 15:54
+---
+
+# What is row lineage?
+
+Row lineage is a way of tracking each individual row in a table over time. Every row gets a permanent ID, and the table records when each row was last changed. This makes it possible to see exactly which rows have been added or updated since a given point.
+
+In [Apache Iceberg](/wiki/iceberg/index.mdx), row lineage was introduced in version 3 of the table format.
+
+## Why it matters
+
+Without row lineage, finding out what changed in a table usually means comparing the whole table against an older version. That's slow and expensive. Row lineage makes it simple:
+
+- **Process only what's new.** Tools that build reports or summaries can update just the rows that changed, instead of starting from scratch each time.
+- **Follow a row's history.** You can track the same row across many updates, even when its values change.
+- **Reliable change tracking.** Rows keep their IDs even when Iceberg reorganizes files behind the scenes, so changes are never missed or counted twice.
+- **Easier audits.** You can see when each row was last modified.
+
+## How it works
+
+Courier companies solved this problem long ago. Every parcel gets a tracking number that stays the same as it moves between vans and warehouses, and each scan records when it was last handled. Row lineage gives every row a tracking number and a "last scanned" record.
+
+In Iceberg, row lineage adds two hidden fields to every row:
+
+1. **A row ID** (`_row_id`). A unique number assigned when the row is first written. It stays the same for the life of the row, even when the row is updated.
+2. **A last-updated sequence number** (`_last_updated_sequence_number`). A number showing which [commit](/wiki/commit/index.mdx) last changed the row. Each commit has a higher sequence number than the one before.
+
+To find what changed since your last check, a tool looks for rows with a sequence number higher than the one it saw last time.
+
+These IDs are assigned by Iceberg itself. They're different from a table's [identity column](/wiki/identity-column/index.mdx), which comes from your data, such as a `booking_id`.
+
+Row lineage tracks individual rows *within* a table. To track how data flows *between* tables, see [table lineage](/wiki/table-lineage/index.mdx).
+
+## Example
+
+A pet-sitting business keeps a `customer_summary` table showing how much each customer has spent. It's rebuilt every hour from the `bookings` table, which holds millions of rows.
+
+With row lineage, the hourly job only needs to look at bookings with a sequence number higher than last time. Instead of rereading millions of rows, it processes the few hundred that were added or changed in the past hour, so the summary updates in seconds.
+
+## Row lineage in Airfoil
+
+{/* TODO: confirm with Francesco whether Airfoil tables use Iceberg v3 row lineage, and whether customers can use it to process changes incrementally (e.g., with dbt or their own engine). Link to the relevant product doc. */}
+
+[How Airfoil supports row lineage.]
+
+## Related terms
+
+- [Table lineage](/wiki/table-lineage/index.mdx): how data flows between tables and where it came from
+- [Commit](/wiki/commit/index.mdx): the step that gives changed rows a new sequence number
+- [Snapshot](/wiki/snapshot/index.mdx): a saved version of a table at a point in time
+- [Identity column](/wiki/identity-column/index.mdx): the key from your data that identifies each record
