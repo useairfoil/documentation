@@ -1,0 +1,60 @@
+---
+title: "Streaming vs. batch: what's the difference?"
+titleShort: "Streaming vs. batch"
+description: "Batch processing moves data in scheduled groups, while streaming moves it continuously as it's created."
+updatedAt: 2026-11-04 15:50
+---
+
+# Streaming vs. batch: what's the difference?
+
+Streaming and batch are two ways of moving and processing data.
+
+- **Batch** collects data over a period of time, then moves it all at once on a schedule, such as every hour or every night.
+- **Streaming** moves each piece of data continuously, within seconds of it being created.
+
+Most [data pipelines](/wiki/data-pipeline/index.mdx) use one or the other, or a mix of both.
+
+## Why it matters
+
+The choice affects how fresh your data is, how much it costs, and how complex your setup is:
+
+- **Freshness.** Streaming gives you data within seconds. Batch data is only as recent as the last run.
+- **Cost.** Batch is usually cheaper, because work is done in fewer, larger runs.
+- **Complexity.** Batch pipelines are simpler to build and fix. Streaming needs systems that run all the time and handle failures without losing data.
+- **Use case.** Live dashboards, alerts, and AI agents benefit from streaming. Monthly reports and historical analysis are usually fine with batch.
+
+## How it works
+
+There are two ways to get the news. A morning newspaper gathers everything that happened yesterday and delivers it all in one go. News alerts on your phone arrive the moment something happens. Batch works like the newspaper, and streaming works like the alerts.
+
+| | Batch | Streaming |
+| --- | --- | --- |
+| **How data moves** | In groups, on a schedule | Continuously, as it's created |
+| **How fresh it is** | Minutes to hours old | Seconds old |
+| **Cost** | Usually lower | Usually higher |
+| **Good for** | Reports, historical analysis | Live dashboards, alerts, AI agents |
+
+In practice, many systems sit somewhere in between. They accept data continuously but write it to tables in small, frequent batches, every few seconds or minutes. This is often called *micro-batching*. It gives you data that's close to real time, without the cost of writing every single record separately.
+
+For [Apache Iceberg](/wiki/iceberg/index.mdx) tables, this middle ground is especially useful. Every [commit](/wiki/commit/index.mdx) creates new files and a new snapshot, so committing every record on its own would create huge numbers of tiny files. Grouping records into small batches keeps tables fast and costs down.
+
+## Example
+
+A pet-sitting business uses data in two very different ways.
+
+Its finance team runs a revenue report once a month, so a nightly batch of payments data is more than enough. But its app shows customers which sitters are free right now. That needs streaming, because a sitter who was booked two hours ago shouldn't still appear as available.
+
+## Streaming vs. batch in Airfoil
+
+Airfoil combines the two. When a [connector](/wiki/connector/index.mdx) sends data, Airfoil accepts it straight away and saves it to its [write ahead log](/wiki/write-ahead-log/index.mdx). It then commits the data to your Iceberg tables in small batches, at an interval you choose between 15 seconds and 15 minutes.
+
+A short interval gives you near-real-time data for live use cases. A longer interval keeps costs down when a few minutes' delay doesn't matter.
+
+{/* TODO: confirm with Francesco whether connectors stream data from sources continuously, or check them on a schedule (and whether this depends on the source). Link to the relevant product doc. */}
+
+## Related terms
+
+- [Data pipeline](/wiki/data-pipeline/index.mdx): the steps that move data from sources to tables
+- [Commit](/wiki/commit/index.mdx): the step that adds a batch of new data to a table
+- [Write ahead log](/wiki/write-ahead-log/index.mdx): where incoming data is saved before it's committed
+- [Connector](/wiki/connector/index.mdx): how data arrives in Airfoil
