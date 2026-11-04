@@ -1,0 +1,58 @@
+---
+title: "What is table lineage?"
+titleShort: "Table lineage"
+description: "Table lineage shows where a table's data comes from and which other tables, reports, and tools depend on it."
+updatedAt: 2026-11-04 15:58
+---
+
+# What is table lineage?
+
+Table lineage is a map of how data flows between tables. For any table, it shows where its data comes from, such as a source tool or another table, and where that data goes next, such as other tables, dashboards, or AI agents.
+
+The tables a table depends on are called *upstream*. The tables and tools that depend on it are called *downstream*.
+
+## Why it matters
+
+As data teams grow, they build tables on top of tables, and it gets hard to keep track of what depends on what. Lineage makes those connections visible:
+
+- **Find the cause of problems.** When a number looks wrong, you can trace it back through each upstream table to where the problem started.
+- **See the impact of changes.** Before changing or removing a column, you can see every downstream table and dashboard that uses it.
+- **Trust the data.** Knowing exactly where data came from makes it easier to rely on.
+- **Help AI agents.** Agents can use lineage to understand which tables are original sources and which are derived from them.
+
+## How it works
+
+A good comparison is a family tree. It shows who each person's parents and grandparents are, and who their children are. Follow the branches up and you see where someone came from. Follow them down and you see who came after. Table lineage does the same for tables.
+
+Lineage is usually shown as a diagram:
+
+```text
+Stripe ──────────► payments ──┐
+                              ├──► customer_summary ──► Revenue dashboard
+Booking app ─────► bookings ──┘
+```
+
+Here, `customer_summary` has two upstream tables, `payments` and `bookings`, and one downstream dashboard.
+
+Lineage is recorded by the tools that move and transform data. [Connectors](/wiki/connector/index.mdx) know which source each table comes from. Transformation tools, such as dbt, know which tables were used to build each new one. Many tools share this information using an open standard called OpenLineage, so it can be combined into one complete map.
+
+Table lineage tracks how data flows *between* tables. To track changes to individual rows *within* a table, see [row lineage](/wiki/row-lineage/index.mdx).
+
+## Example
+
+A pet-sitting business notices that its revenue dashboard shows almost nothing for Tuesday.
+
+The team uses lineage to trace the problem upstream. The dashboard reads from `customer_summary`, which is built from `payments` and `bookings`. The `bookings` table looks fine, but `payments` stopped updating on Monday night, because the Stripe connection had expired. They reconnect Stripe, and the dashboard catches up.
+
+## Table lineage in Airfoil
+
+{/* TODO: confirm with Francesco whether Airfoil records table lineage (e.g., which connector and source each table comes from), whether it's shown anywhere or shared with other tools (e.g., via OpenLineage), and whether it's part of the annotations for AI agents. Link to the relevant product doc. */}
+
+[How Airfoil supports table lineage.]
+
+## Related terms
+
+- [Row lineage](/wiki/row-lineage/index.mdx): tracking changes to individual rows within a table
+- [Data pipeline](/wiki/data-pipeline/index.mdx): the steps that move data from sources to tables
+- [Connector](/wiki/connector/index.mdx): how data arrives in Airfoil from each source
+- [Schema evolution strategies](/wiki/schema-evolution/index.mdx): changing tables safely without breaking what depends on them
