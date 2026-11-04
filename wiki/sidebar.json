@@ -26,6 +26,22 @@
         { "name": "Sort column", "type": "page", "path": "/sort-column" },
         { "name": "Identity column", "type": "page", "path": "/identity-column" }
       ]
+    },
+    {
+      "name": "Storage engine",
+      "path": "/",
+      "items": [
+        { "name": "Write ahead log", "type": "page", "path": "/write-ahead-log" },
+        { "name": "Durability", "type": "page", "path": "/durability" },
+        { "name": "Deduplication", "type": "page", "path": "/deduplication" }
+      ]
+    },
+    {
+      "name": "Getting data in",
+      "path": "/",
+      "items": [
+        { "name": "Data pipeline", "type": "page", "path": "/data-pipeline" }
+      ]
     }
   ]
 }
