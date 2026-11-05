@@ -1,0 +1,65 @@
+---
+title: "What is an API?"
+titleShort: "API"
+description: "An API is a set of rules that lets one piece of software request data or actions from another."
+updatedAt: 2026-11-05 21:18
+---
+
+# What is an API?
+
+An API, or *application programming interface*, is a set of rules that lets one piece of software talk to another. One program sends a request, such as "give me today's payments", and the other sends back a response with the data or a result.
+
+Almost every modern tool has an API. It's how apps share data, and how [connectors](/wiki/connector/index.mdx) copy data from tools like Stripe or Salesforce.
+
+## Why it matters
+
+APIs are what let different tools work together:
+
+- **Access to data.** An API lets you get data out of a tool without exporting files by hand.
+- **Automation.** Programs can use APIs to send and receive data on their own, at any time of day.
+- **Safe, controlled access.** An API only exposes what the tool chooses to share, and checks who's asking before it responds.
+- **Building blocks.** Developers can combine APIs from different tools to build new apps and workflows.
+
+## How it works
+
+At a hotel, guests don't wander into the back office to find a spare towel. They ask at the front desk, and staff fetch it for them. The desk decides what guests can ask for and checks they're actually staying there. An API is a tool's front desk.
+
+Most APIs work like this:
+
+1. **A request is sent** to a specific web address, called an *endpoint*, such as `/v1/charges`.
+2. **The request says what it wants.** For example, `GET` to fetch data, or `POST` to send new data.
+3. **The API checks who's asking**, usually with an [API token](/wiki/api-token/index.mdx) included in the request.
+4. **The API sends a response**, usually as JSON, along with a status code showing whether the request worked.
+
+Here's a simplified example of a request and its response:
+
+```text
+GET https://api.example.com/v1/bookings/5531
+```
+
+```json
+{ "booking_id": 5531, "service": "Dog walking", "status": "confirmed" }
+```
+
+Many APIs also set *rate limits*, which cap how many requests you can send in a given time, so one user can't overload the service. And large results are often split into pages, so they have to be fetched in several requests.
+
+## Example
+
+A pet-sitting business built its own booking app, so there's no ready-made connector for it.
+
+Instead, the team's developers add a few lines of code to the app. Every time a booking is created or changed, the app sends it to the company's data lake through an API. The bookings appear in the `bookings` table moments later, alongside the payments data from Stripe.
+
+## APIs in Airfoil
+
+Airfoil connectors use each source's API to copy your data, so you don't have to work with those APIs yourself.
+
+Airfoil also has its own API, which you can use to send data directly from your own apps and services, such as a source that doesn't have a connector.
+
+{/* TODO: confirm with Francesco: (1) can customers send data directly through the Airfoil API, and how does it work (e.g., an endpoint per table), (2) can the API also be used to manage Airfoil, such as deploying connectors, and (3) where is the API reference? Link to the relevant product doc. */}
+
+## Related terms
+
+- [API token](/wiki/api-token/index.mdx): the credential that proves who's sending a request
+- [Connector](/wiki/connector/index.mdx): a ready-made integration that uses a source's API
+- [Semi-structured data](/wiki/semi-structured-data/index.mdx): data like JSON, the usual format for API responses
+- [Data pipeline](/wiki/data-pipeline/index.mdx): the steps that move data from sources to tables
