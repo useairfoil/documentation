@@ -43,7 +43,9 @@ With row lineage, the hourly job only needs to look at bookings with a sequence 
 
 ## Row lineage in Airfoil
 
-{/* TODO: confirm with Francesco whether Airfoil tables use Iceberg v3 row lineage, and whether customers can use it to process changes incrementally (e.g., with dbt or their own engine). Link to the relevant product doc. */}
+Airfoil supports Iceberg v3 row lineage out of the box. Every row in your Airfoil tables has a row ID and a last-updated sequence number, so any engine that supports Iceberg v3 can use them to process only the rows that changed since its last run.
+
+{/* TODO: link to the relevant product doc once it exists. */}
 
 [How Airfoil supports row lineage.]
 
