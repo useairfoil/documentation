@@ -1,0 +1,62 @@
+---
+title: "What is a connector?"
+titleShort: "Connector"
+description: "A connector is a ready-made integration that brings data from a source, such as a SaaS tool or database, into your data lake."
+updatedAt: 2026-11-05 21:14
+---
+
+# What is a connector?
+
+A connector is a ready-made integration that copies data from a source, such as Stripe, Salesforce, or a database, into a destination like a [data lake](/wiki/datalake/index.mdx). It handles the work of fetching the data, turning it into tables, and keeping those tables up to date.
+
+Connectors are the starting point of most [data pipelines](/wiki/data-pipeline/index.mdx).
+
+## Why it matters
+
+Getting data out of a tool sounds simple, but every source works differently. Connectors take care of that:
+
+- **No custom code.** Instead of writing and maintaining a script for each tool, you set up a connector and it does the work.
+- **Built for each source.** A connector knows how its source's [API](/wiki/api/index.mdx) works, including its limits and quirks.
+- **Always up to date.** Connectors keep fetching new and changed data, so your tables stay current.
+- **Ready-to-query tables.** Data arrives already organized into tables with the right columns and types.
+
+## How it works
+
+The closest everyday equivalent is a travel plug adapter. Every country has its own type of socket, so your charger won't fit everywhere. An adapter sits in between, so your device works wherever you plug it in. A connector does the same between each source's way of sharing data and your tables.
+
+A connector typically:
+
+1. **Signs in to the source.** It uses credentials you provide, such as an [API token](/wiki/api-token/index.mdx).
+2. **Copies the existing data.** The first time it runs, it fetches the source's historical data, usually in batches.
+3. **Fetches what's changed.** After that, it picks up only new and updated records, either on a schedule or continuously. See [streaming vs. batch](/wiki/streaming-vs-batch/index.mdx).
+4. **Keeps track of its place.** It remembers what it has already copied, so nothing is fetched twice or missed after a restart.
+5. **Writes to tables.** It turns the data into tables, with a [schema](/wiki/table-schema/index.mdx) that fits the source.
+
+Along the way, a good connector also handles the practical problems: retrying when a request fails, staying within the source's rate limits, and adapting when the source adds new fields.
+
+## Example
+
+A pet-sitting business wants its Stripe payments in its data lake. Someone on the team adds a Stripe connector and pastes in an API key.
+
+The connector creates tables such as `charges`, `customers`, and `refunds`, then copies three years of payment history. From then on, every new payment appears in the `charges` table within moments, and nobody has to export anything from Stripe again.
+
+## Connectors in Airfoil
+
+Connectors are how most data gets into Airfoil. When you deploy a connector, Airfoil creates its tables for you, with:
+
+- the right columns and types for the source
+- an [identity column](/wiki/identity-column/index.mdx), so records can be [deduplicated](/wiki/deduplication/index.mdx)
+- a version column, usually "updated at", so the latest version of each record is kept
+- a recommended [sort order](/wiki/sort-column/index.mdx)
+
+Each connector first copies the source's existing data in batches, then streams changes continuously if the source supports it, such as Stripe. When the source changes its structure, Airfoil updates the table schemas for you, following its [schema evolution](/wiki/schema-evolution/index.mdx) rules.
+
+{/* TODO: confirm with Francesco: (1) which connectors are available and whether to link to a list, (2) whether customers can build their own connectors (e.g., using the Connector Template), and (3) whether to mention that credentials are kept in a secret store. Link to the relevant product docs. */}
+
+## Related terms
+
+- [Data pipeline](/wiki/data-pipeline/index.mdx): the steps that move data from sources to tables
+- [API](/wiki/api/index.mdx): the way connectors request data from a source
+- [API token](/wiki/api-token/index.mdx): the credential a connector uses to sign in to a source
+- [Streaming vs. batch](/wiki/streaming-vs-batch/index.mdx): two ways a connector can fetch data
+- [Identity column](/wiki/identity-column/index.mdx): the key a connector sets so records can be deduplicated
