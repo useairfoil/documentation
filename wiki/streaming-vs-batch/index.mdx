@@ -50,7 +50,9 @@ Airfoil combines the two. When a [connector](/wiki/connector/index.mdx) sends da
 
 A short interval gives you near-real-time data for live use cases. A longer interval keeps costs down when a few minutes' delay doesn't matter.
 
-{/* TODO: confirm with Francesco whether connectors stream data from sources continuously, or check them on a schedule (and whether this depends on the source). Link to the relevant product doc. */}
+Connectors use both approaches too. When you first connect a source, the connector copies its existing data in batches. After that, if the source supports it, such as Stripe, the connector streams new changes continuously as they happen.
+
+{/* TODO: link to the relevant product doc once it exists. */}
 
 ## Related terms
 
