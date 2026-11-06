@@ -24,7 +24,9 @@
         { "name": "Schema evolution strategies", "type": "page", "path": "/schema-evolution" },
         { "name": "Partitioning", "type": "page", "path": "/partitioning" },
         { "name": "Sort column", "type": "page", "path": "/sort-column" },
-        { "name": "Identity column", "type": "page", "path": "/identity-column" }
+        { "name": "Identity column", "type": "page", "path": "/identity-column" },
+        { "name": "Row lineage", "type": "page", "path": "/row-lineage" },
+        { "name": "Table lineage", "type": "page", "path": "/table-lineage" }
       ]
     },
     {
@@ -41,7 +43,9 @@
       "path": "/",
       "items": [
         { "name": "Data pipeline", "type": "page", "path": "/data-pipeline" },
-        { "name": "Streaming vs. batch", "type": "page", "path": "/streaming-vs-batch" }
+        { "name": "Streaming vs. batch", "type": "page", "path": "/streaming-vs-batch" },
+        { "name": "Connector", "type": "page", "path": "/connector" },
+        { "name": "API", "type": "page", "path": "/api" }
       ]
     }
   ]
