@@ -1,0 +1,68 @@
+---
+title: "What is an API token?"
+titleShort: "API token"
+description: "An API token is a secret key that a program includes in its requests to prove who it is and what it's allowed to do."
+updatedAt: 2026-11-06 14:05
+---
+
+# What is an API token?
+
+An API token is a long, secret string of characters that a program sends with each request to an [API](/wiki/api/index.mdx). It tells the API who's making the request and what they're allowed to do.
+
+API tokens are sometimes called *API keys* or *access tokens*. They let programs sign in without using a person's username and password.
+
+## Why it matters
+
+Programs often need to access tools without a person there to sign in. API tokens make that possible, safely:
+
+- **No shared passwords.** Each app or [connector](/wiki/connector/index.mdx) gets its own token, so nobody has to hand out their password.
+- **Limited access.** A token can be restricted to only the actions it needs, such as reading payments but not issuing refunds.
+- **Easy to cancel.** If a token is exposed, you can cancel it without changing your password or affecting other tokens.
+- **Clear records.** Because each token is separate, you can see which app made which request.
+
+## How it works
+
+Car owners have had a version of this for decades: the valet key. It starts the car so a parking attendant can move it, but it won't open the trunk or the glove box. And if it goes missing, you can replace it without changing the locks. An API token is a valet key for your tools.
+
+Most API tokens work like this:
+
+1. **You create a token** in the tool's settings, often choosing what it's allowed to do. These permissions are called *scopes*.
+2. **You copy it once.** Many tools only show the full token when it's created, so it can't be read again later.
+3. **The program sends it with every request**, usually in a header like this:
+
+   ```text
+   Authorization: Bearer YOUR_API_TOKEN
+   ```
+
+4. **The API checks the token** and only carries out the request if the token is valid and has the right permissions.
+
+Tokens are as powerful as passwords, so they need the same care:
+
+- Store them in a secret store or environment variable, never in code or shared documents.
+- Never commit them to a Git repository, even a private one.
+- Give each token only the permissions it needs.
+- Replace tokens regularly, and cancel any you no longer use.
+
+## Example
+
+A pet-sitting business sends bookings from its own app to its data lake. Its developer creates an API token that can only add new bookings, and stores it in the app's secret settings.
+
+Months later, the developer accidentally pastes the token into a public forum post. They cancel the token straight away and create a new one. Because it could only add bookings, nobody could have used it to read or delete existing data, and nothing else had to change.
+
+## API tokens in Airfoil
+
+Airfoil uses API tokens in three ways:
+
+- **Connecting to your sources.** When you deploy a [connector](/wiki/connector/index.mdx), you give it a token for the source, such as a Stripe API key. Airfoil keeps these credentials in a secret store and limits which services can access them.
+- **Sending data to Airfoil.** When your own apps send data through the Airfoil [API](/wiki/api/index.mdx), they use an Airfoil API token to prove who they are.
+- **Connecting AI agents.** Your Airfoil API token is also how an agent connects to the Airfoil [MCP](/wiki/mcp/index.mdx) server.
+
+You create Airfoil API tokens in your Airfoil dashboard, and each token is limited in the actions it can perform. Airfoil stores tokens *hashed*, meaning each one is put through a one-way transformation that can't be reversed. Because of this, a token can only be shown once, when you create it, so copy it somewhere safe straight away.
+
+{/* TODO: link to the dashboard / API tokens product doc once it exists. */}
+
+## Related terms
+
+- [API](/wiki/api/index.mdx): the set of rules that tokens are used with
+- [Connector](/wiki/connector/index.mdx): a ready-made integration that uses a token to sign in to a source
+- [MCP](/wiki/mcp/index.mdx): the standard AI agents use to manage Airfoil
