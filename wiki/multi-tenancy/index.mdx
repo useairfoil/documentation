@@ -43,9 +43,11 @@ Each pet-sitting business is a tenant. They all use the same app, but each one o
 
 Airfoil's storage engine is multi-tenant. A single Airfoil deployment can manage many separate catalogs, and each catalog's tables and files are kept apart from every other catalog's in [object storage](/wiki/object-storage/index.mdx).
 
-This lets Airfoil run efficiently for many customers at once, while keeping each customer's data private.
+Airfoil keeps all data separate by catalog, so one customer's data is never mixed with another's. This design is also what makes it possible to bring your own bucket and catalog: because each catalog's data is stored in its own place, it can live in your storage just as easily as in Airfoil's.
 
-{/* TODO: confirm with Francesco: (1) is each customer's data kept in its own catalog, (2) how does multi-tenancy work when customers bring their own bucket or catalog, (3) can customers use it themselves, for example to keep their own customers' data in separate catalogs, and (4) how does Airfoil stop one busy tenant from slowing down others? Link to the Architecture product doc. */}
+Every Airfoil system has limits in place, so one busy customer can't slow everyone else down, and Airfoil automatically scales up its infrastructure as demand grows. This lets Airfoil run efficiently for many customers at once, while keeping each customer's data private.
+
+{/* TODO: link to the Architecture product doc once it exists. */}
 
 ## Related terms
 
