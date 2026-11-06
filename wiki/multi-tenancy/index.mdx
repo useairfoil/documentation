@@ -1,0 +1,55 @@
+---
+title: "What is multi-tenancy?"
+titleShort: "Multi-tenancy"
+description: "Multi-tenancy is when one system serves many separate customers, called tenants, while keeping each one's data private."
+updatedAt: 2026-11-06 14:10
+---
+
+# What is multi-tenancy?
+
+Multi-tenancy is when a single system serves many separate customers at the same time. Each customer is called a *tenant*. Tenants share the same software and infrastructure, but each one's data is kept separate, so no tenant can see another's.
+
+Most cloud services work this way. When you sign in to an email service or a project management tool, you're one of many tenants using the same system.
+
+## Why it matters
+
+Multi-tenancy is how cloud services stay affordable and easy to run:
+
+- **Lower costs.** Sharing infrastructure across many tenants costs far less than giving each one its own servers.
+- **Simpler updates.** Fixes and new features are rolled out once, and every tenant gets them at the same time.
+- **Easy to grow.** New tenants can be added without setting up new systems.
+- **Privacy by design.** A well-built multi-tenant system keeps every tenant's data separate and secure, even though the system is shared.
+
+The opposite approach, *single-tenancy*, gives each customer their own separate copy of the system. It offers more control, but it costs more and takes more work to maintain.
+
+## How it works
+
+The classic example is an apartment building. Everyone shares the same foundations, elevators, and plumbing, but each apartment has its own front door and its own key. Residents can't walk into each other's homes, even though they live under the same roof.
+
+A multi-tenant system works in a similar way:
+
+1. **Every tenant has an ID.** Each request and each piece of data is tagged with the tenant it belongs to.
+2. **Data is kept apart.** Each tenant's data is stored separately, for example in its own folder, database, or [catalog](/wiki/catalog/index.mdx).
+3. **Access is checked every time.** Before returning data, the system confirms that the request comes from the right tenant, often using an [API token](/wiki/api-token/index.mdx).
+4. **Resources are shared fairly.** The system makes sure one busy tenant can't slow everyone else down. This is sometimes called the *noisy neighbor* problem.
+
+## Example
+
+A software company sells booking software to hundreds of pet-sitting businesses. Instead of running a separate system for each one, it runs a single multi-tenant system.
+
+Each pet-sitting business is a tenant. They all use the same app, but each one only ever sees its own bookings, customers, and payments. When the company adds a new feature, every business gets it at once.
+
+## Multi-tenancy in Airfoil
+
+Airfoil's storage engine is multi-tenant. A single Airfoil deployment can manage many separate catalogs, and each catalog's tables and files are kept apart from every other catalog's in [object storage](/wiki/object-storage/index.mdx).
+
+This lets Airfoil run efficiently for many customers at once, while keeping each customer's data private.
+
+{/* TODO: confirm with Francesco: (1) is each customer's data kept in its own catalog, (2) how does multi-tenancy work when customers bring their own bucket or catalog, (3) can customers use it themselves, for example to keep their own customers' data in separate catalogs, and (4) how does Airfoil stop one busy tenant from slowing down others? Link to the Architecture product doc. */}
+
+## Related terms
+
+- [Catalog](/wiki/catalog/index.mdx): the directory that keeps track of a tenant's tables
+- [Object storage](/wiki/object-storage/index.mdx): where each tenant's files are stored
+- [API token](/wiki/api-token/index.mdx): a credential that shows which tenant is making a request
+- [Write ahead log](/wiki/write-ahead-log/index.mdx): where Airfoil saves incoming data before committing it
