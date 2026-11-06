@@ -51,7 +51,13 @@ Connectors are how most data gets into Airfoil. When you deploy a connector, Air
 
 Each connector first copies the source's existing data in batches, then streams changes continuously if the source supports it, such as Stripe. When the source changes its structure, Airfoil updates the table schemas for you, following its [schema evolution](/wiki/schema-evolution/index.mdx) rules.
 
-{/* TODO: confirm with Francesco: (1) which connectors are available and whether to link to a list, (2) whether customers can build their own connectors (e.g., using the Connector Template), and (3) whether to mention that credentials are kept in a secret store. Link to the relevant product docs. */}
+Airfoil protects the credentials connectors use, such as [API tokens](/wiki/api-token/index.mdx), by storing them in a secret store and limiting which services can access them.
+
+If there isn't a connector for your source yet, you can build your own with the Airfoil Connector Kit. It's a TypeScript package designed to make it easy for AI tools to generate production-ready connectors.
+
+For the full list of available connectors, see [Airfoil connectors](https://useairfoil.com/connectors).
+
+{/* TODO: link to the Connector Kit product doc once it exists. */}
 
 ## Related terms
 
