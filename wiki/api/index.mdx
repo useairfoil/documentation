@@ -53,9 +53,11 @@ Instead, the team's developers add a few lines of code to the app. Every time a 
 
 Airfoil connectors use each source's API to copy your data, so you don't have to work with those APIs yourself.
 
-Airfoil also has its own API, which you can use to send data directly from your own apps and services, such as a source that doesn't have a connector.
+Airfoil also has its own API, which you can use to send data directly from your own apps and services, such as a source that doesn't have a connector. Instead of the JSON requests described above, it uses the Arrow Flight protocol, which is designed for moving large amounts of data between services efficiently.
 
-{/* TODO: confirm with Francesco: (1) can customers send data directly through the Airfoil API, and how does it work (e.g., an endpoint per table), (2) can the API also be used to manage Airfoil, such as deploying connectors, and (3) where is the API reference? Link to the relevant product doc. */}
+You don't manage Airfoil itself, such as deploying connectors, through a traditional API. Instead, you use Airfoil's MCP (Model Context Protocol) server, so AI agents can help you set things up.
+
+{/* TODO: link to the API and MCP server product docs once they exist. */}
 
 ## Related terms
 
