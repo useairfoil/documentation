@@ -51,12 +51,15 @@ Months later, the developer accidentally pastes the token into a public forum po
 
 ## API tokens in Airfoil
 
-Airfoil uses API tokens in two ways:
+Airfoil uses API tokens in three ways:
 
 - **Connecting to your sources.** When you deploy a [connector](/wiki/connector/index.mdx), you give it a token for the source, such as a Stripe API key. Airfoil keeps these credentials in a secret store and limits which services can access them.
 - **Sending data to Airfoil.** When your own apps send data through the Airfoil [API](/wiki/api/index.mdx), they use an Airfoil API token to prove who they are.
+- **Connecting AI agents.** Your Airfoil API token is also how an agent connects to the Airfoil [MCP](/wiki/mcp/index.mdx) server.
 
-{/* TODO: confirm with Francesco: (1) how users create and cancel Airfoil API tokens (e.g., through the MCP server), (2) whether tokens can be limited to certain tables or actions, and (3) whether tokens are also used to sign in to the MCP server. Link to the relevant product doc. */}
+You create Airfoil API tokens in your Airfoil dashboard, and each token is limited in the actions it can perform. Airfoil stores tokens *hashed*, meaning each one is put through a one-way transformation that can't be reversed. Because of this, a token can only be shown once, when you create it, so copy it somewhere safe straight away.
+
+{/* TODO: link to the dashboard / API tokens product doc once it exists. */}
 
 ## Related terms
 
