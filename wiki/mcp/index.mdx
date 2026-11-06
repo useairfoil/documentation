@@ -1,0 +1,64 @@
+---
+title: "What is MCP (Model Context Protocol)?"
+titleShort: "MCP"
+description: "MCP is an open standard that lets AI agents connect to tools and data, so they can look things up and take actions for you."
+updatedAt: 2026-11-06 14:43
+---
+
+# What is MCP (Model Context Protocol)?
+
+MCP, short for *Model Context Protocol*, is an open standard for connecting AI agents to other tools and data. It gives agents, such as AI assistants and coding tools, a common way to find out what a tool can do and then use it, for example to look up information or carry out a task.
+
+MCP was originally created by Anthropic and is now supported by many AI apps and tools.
+
+## Why it matters
+
+On their own, AI agents can only work with what's in front of them. MCP lets them reach out to the tools you already use:
+
+- **One standard for every tool.** A tool only needs to support MCP once to work with any MCP-compatible agent, instead of building a separate integration for each one.
+- **Agents that can act.** Agents can do real work, such as creating records or changing settings, not just answer questions.
+- **Up-to-date answers.** Agents can fetch live data instead of relying only on what they already know.
+- **You stay in control.** Each tool decides what agents are allowed to do, and many agent apps ask you to approve actions before they happen.
+
+## How it works
+
+MCP is often described as a USB-C port for AI. Before USB-C, every device needed its own kind of cable. Now one standard plug works with phones, laptops, and headphones alike. MCP gives AI agents and tools that same kind of shared plug.
+
+MCP has three main parts:
+
+1. **The host.** The AI app you're using, such as a chat assistant or a coding tool.
+2. **The client.** The part of the host that connects to MCP servers on your behalf.
+3. **The server.** A small service, provided by a tool, that describes what the tool offers and carries out requests.
+
+An MCP server can offer:
+
+- **Tools:** actions the agent can take, such as "create a connector" or "list tables".
+- **Resources:** data the agent can read, such as a table's schema.
+- **Prompts:** ready-made instructions for common tasks.
+
+When you ask an agent to do something, it checks which tools its connected servers offer, picks the right one, and calls it. The server does the work and sends the result back, and the agent uses it to answer you.
+
+MCP works alongside [APIs](/wiki/api/index.mdx), not instead of them. An API is designed for programs written by developers. MCP is designed so that AI agents can discover and use a tool's features on their own.
+
+## Example
+
+A pet-sitting business's operations manager uses an AI assistant that's connected to the company's data platform through MCP.
+
+She asks, *"Connect our Zendesk account and let me know when the support tickets are ready to query."* The assistant finds the right tool on the MCP server, sets up the connection, and checks back until the `tickets` table appears. She never has to open a settings page.
+
+## MCP in Airfoil
+
+Airfoil is managed through its MCP server, rather than a traditional management API. This means you can connect an AI agent to Airfoil and ask it to help you set things up, such as deploying a [connector](/wiki/connector/index.mdx).
+
+Sending data into Airfoil is different: for that, you use the Airfoil [API](/wiki/api/index.mdx), which is designed for moving large amounts of data efficiently.
+
+To connect an agent, you use an Airfoil [API token](/wiki/api-token/index.mdx), which you create in your Airfoil dashboard.
+
+{/* TODO: confirm with Francesco: (1) which tasks the MCP server supports (e.g., deploying connectors, changing commit intervals, approving schema changes, querying tables), (2) whether to name any agents it's been tested with. Link to the MCP server product doc. */}
+
+## Related terms
+
+- [API](/wiki/api/index.mdx): a set of rules that lets programs request data or actions from each other
+- [API token](/wiki/api-token/index.mdx): a credential that proves who's making a request
+- [Connector](/wiki/connector/index.mdx): a ready-made integration you can deploy through MCP
+- [Table schema](/wiki/table-schema/index.mdx): table definitions that agents can read to understand your data
