@@ -2,7 +2,7 @@
 title: "What is multi-tenancy?"
 titleShort: "Multi-tenancy"
 description: "Multi-tenancy is when one system serves many separate customers, called tenants, while keeping each one's data private."
-updatedAt: 2026-11-06 14:10
+updatedAt: 2026-11-06 15:07
 ---
 
 # What is multi-tenancy?
@@ -46,6 +46,8 @@ Airfoil's storage engine is multi-tenant. A single Airfoil deployment can manage
 Airfoil keeps all data separate by catalog, so one customer's data is never mixed with another's. This design is also what makes it possible to bring your own bucket and catalog: because each catalog's data is stored in its own place, it can live in your storage just as easily as in Airfoil's.
 
 Every Airfoil system has limits in place, so one busy customer can't slow everyone else down, and Airfoil automatically scales up its infrastructure as demand grows. This lets Airfoil run efficiently for many customers at once, while keeping each customer's data private.
+
+You can create as many catalogs as you need. So if you have customers of your own, you can keep each customer's data in its own catalog, separate from the others.
 
 {/* TODO: link to the Architecture product doc once it exists. */}
 
