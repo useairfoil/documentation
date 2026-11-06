@@ -40,7 +40,8 @@
       "name": "Getting data in",
       "path": "/",
       "items": [
-        { "name": "Data pipeline", "type": "page", "path": "/data-pipeline" }
+        { "name": "Data pipeline", "type": "page", "path": "/data-pipeline" },
+        { "name": "Streaming vs. batch", "type": "page", "path": "/streaming-vs-batch" }
       ]
     }
   ]
